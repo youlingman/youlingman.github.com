@@ -1,16 +1,15 @@
-safe:        false
-auto:        false
-server:      false
-server_port: 4000
-baseurl:    /
-url: http://localhost:4000
+permalink: /:month-:day-:year/:title
 
-source:      .
-destination: ./_site
-plugins:     ./_plugins
+auto: true
+pygments: true
 
-future:      true
-lsi:         false
-pygments:    false
 markdown:    rdiscount
-permalink:   date
+
+title : youlingman's thought
+
+author :
+  name : youlingman
+  github : youlingman
+  twitter : youlingman
+
+production_url : http://youlingman.github.com

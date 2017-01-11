@@ -1,0 +1,27 @@
+language: node_js
+
+node_js:
+- "node"
+
+branches:
+  only:
+  - hexo
+
+before_install:
+- npm install -g hexo
+#- npm install -g hexo-cli
+
+install:
+- npm install
+
+# Notice: Replace 'YOUR NAME' and 'YOUR EMAIL'
+before_script:
+- git config --global user.name 'youlingman'
+- git config --global user.email 'chenyoucyl@gmail.com'
+
+script:
+- hexo generate
+
+after_success:
+- sed -i'' "s~git@github.com:youlingman/youlingman.github.com.git~https://${GITHUB_API_KEY}:x-oauth-basic@github.com/youlingman/youlingman.github.io.git~" _config.yml
+- hexo deploy

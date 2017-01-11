@@ -23,5 +23,5 @@ script:
 - hexo generate
 
 after_success:
-- sed -i'' "s~git@github.com:youlingman/youlingman.github.com.git~https://${GITHUB_API_KEY}:x-oauth-basic@github.com/youlingman/youlingman.github.io.git~" _config.yml
+- sed -i'' "s~git@github.com:youlingman/youlingman.github.com.git~https://${GITHUB_API_KEY}:x-oauth-basic@github.com/youlingman/youlingman.github.com.git~" _config.yml
 - hexo deploy

@@ -9,7 +9,8 @@ branches:
 
 before_install:
 - npm install -g hexo
-#- npm install -g hexo-cli
+- npm install -g hexo-cli
+- npm install hexo-deployer-git --save
 
 install:
 - npm install
@@ -24,4 +25,4 @@ script:
 
 after_success:
 - sed -i'' "s~git@github.com:youlingman/youlingman.github.com.git~https://${GITHUB_API_KEY}:x-oauth-basic@github.com/youlingman/youlingman.github.com.git~" _config.yml
-- hexo deploy --silent
+- hexo deploy

@@ -27,3 +27,5 @@ tags: [hexo]
 然后利用了Travis CI实现自动更新和发布，参考了[这里](https://xin053.github.io/2016/06/05/Travis%20CI%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2Hexo%E5%8D%9A%E5%AE%A2%E5%88%B0Github/)。
 
 注意Github的personal access token只需要勾上public repo权限就可以完成推送，同时.travis.yml里的hexo deploy记得加上--silent选项，以避免在Travis CI的build log里暴露personal access token。
+
+edit：在travis执行hexo deploy之前，需要提前将hexo部署分支（即存放静态HTML文件的分支）clone到.deploy_git目录，否则[hexo-deployer-git插件](https://github.com/hexojs/hexo-deployer-git)会初始化一个空的.deploy_git目录然后force push，导致部署分支的历史提交记录被重置。

@@ -24,6 +24,6 @@ script:
 - hexo generate
 
 after_success:
-- git clone -b master git@github.com:youlingman/youlingman.github.com.git .deploy_git
+- git clone --depth=50 --branch=master https://github.com/youlingman/youlingman.github.com.git .deploy_git
 - sed -i'' "s~git@github.com:youlingman/youlingman.github.com.git~https://${GITHUB_API_KEY}:x-oauth-basic@github.com/youlingman/youlingman.github.com.git~" _config.yml
 - hexo deploy

@@ -13,7 +13,7 @@ before_install:
 - npm install -g hexo-cli
 - npm install hexo-deployer-git --save
 - npm install hexo-generator-feed --save
-- npm install hexo-generator-feed --save
+- npm install hexo-generator-sitemap --save
 
 install:
 - npm install

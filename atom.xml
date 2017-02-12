@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>cyl&#39;s blog</title>
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://youlingman.info/"/>
+  <updated>2017-02-12T16:41:16.725Z</updated>
+  <id>http://youlingman.info/</id>
+  
+  <author>
+    <name>youlingman</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Hello CYL</title>
+    <link href="http://youlingman.info/2017/02/13/Hello_CYL/"/>
+    <id>http://youlingman.info/2017/02/13/Hello_CYL/</id>
+    <published>2017-02-12T16:41:16.725Z</published>
+    <updated>2017-02-12T16:41:16.725Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;封闭了大半年，喘过气来从新激活下这个hexo博客，感觉技术上的学习还是需要有一个地方记录下，尤其是工作中用不到的、自己学习的东西，也算是一种督促。&lt;/p&gt;
+&lt;p&gt;新的一年，在这里给自己订个目标，希望能在这个博客记录下这几个方面的学习和总结吧：&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="hexo" scheme="http://youlingman.info/tags/hexo/"/>
+    
+  </entry>
+  
+</feed>

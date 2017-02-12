@@ -61,7 +61,6 @@ per_page: 5
 pagination_dir: page
 
 # Disqus Disqus
-disqus_shortname:youlingman-info
 
 # Extensions
 ## Plugins: https://hexo.io/plugins/

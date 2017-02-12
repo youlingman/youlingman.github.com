@@ -68,8 +68,16 @@ disqus_shortname: youlingmaninfo
 ## Themes: https://hexo.io/themes/
 theme: jane
 plugins:
-- hexo-generator-feed
-- hexo-generator-sitemap
+ hexo-generator-feed
+ hexo-generator-sitemap
+
+# Feed config
+feed:
+  type: atom
+  path: atom.xml
+  limit: 20
+  hub:
+  content:
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html

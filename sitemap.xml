@@ -2,16 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://youlingman.info/2017/02/13/Hello_CYL/</loc>
+    <loc>http://youlingman.info/2017/01/31/Hello_CYL/</loc>
     
-    <lastmod>2017-02-12T16:53:27.378Z</lastmod>
+    <lastmod>2017-02-15T14:26:56.352Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://youlingman.info/2017/02/15/lazy_evalutaion_in_scala/</loc>
+    
+    <lastmod>2017-02-15T14:26:56.352Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://youlingman.info/tags/index.html</loc>
     
-    <lastmod>2017-02-12T16:53:27.378Z</lastmod>
+    <lastmod>2017-02-15T14:26:56.352Z</lastmod>
     
   </url>
   

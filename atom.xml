@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://youlingman.info/"/>
-  <updated>2017-02-12T16:53:27.378Z</updated>
+  <updated>2017-02-15T14:26:56.352Z</updated>
   <id>http://youlingman.info/</id>
   
   <author>
@@ -16,11 +16,29 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>scala中的延迟求值</title>
+    <link href="http://youlingman.info/2017/02/15/lazy_evalutaion_in_scala/"/>
+    <id>http://youlingman.info/2017/02/15/lazy_evalutaion_in_scala/</id>
+    <published>2017-02-15T11:57:30.000Z</published>
+    <updated>2017-02-15T14:26:56.352Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在做&lt;a href=&quot;http://aperiodic.net/phil/scala/s-99/&quot;&gt;scala99&lt;/a&gt;的P91 Knight’s tour时，需要递归搜索整个解题空间找到所有可能的解，如果只想要得到部分解，就要先算出全量解再作筛选，这样就要作多余的运算了。在其他编程语言一般利用控制流来实现，即利用if-else条件判断和return返回提前终止搜索过程，而在scala里更functional的写法是利用延迟求值，这里整理下相关的概念。&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="scala" scheme="http://youlingman.info/tags/scala/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Hello CYL</title>
-    <link href="http://youlingman.info/2017/02/13/Hello_CYL/"/>
-    <id>http://youlingman.info/2017/02/13/Hello_CYL/</id>
-    <published>2017-02-12T16:53:27.378Z</published>
-    <updated>2017-02-12T16:53:27.378Z</updated>
+    <link href="http://youlingman.info/2017/01/31/Hello_CYL/"/>
+    <id>http://youlingman.info/2017/01/31/Hello_CYL/</id>
+    <published>2017-01-31T15:59:59.000Z</published>
+    <updated>2017-02-15T14:26:56.352Z</updated>
     
     <summary type="html">
     

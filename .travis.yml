@@ -9,11 +9,11 @@ branches:
 
 before_install:
 - export TZ='Asia/Shanghai'
-- npm install -g hexo --save
-- npm install -g hexo-cli --save
-- npm install hexo-deployer-git --save
-- npm install hexo-generator-feed --save
-- npm install hexo-generator-sitemap --save
+- npm install -g hexo --save --save-prod
+- npm install -g hexo-cli --save --save-prod
+- npm install hexo-deployer-git --save --save-prod
+- npm install hexo-generator-feed --save --save-prod
+- npm install hexo-generator-sitemap --save --save-prod
 
 install:
 - npm install

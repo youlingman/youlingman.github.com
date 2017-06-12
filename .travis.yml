@@ -11,12 +11,14 @@ before_install:
 - export TZ='Asia/Shanghai'
 - npm install -g hexo --save --save-prod
 - npm install -g hexo-cli --save --save-prod
+- npm install hexo --save --save-prod
+- npm install hexo-cli --save --save-prod
 - npm install hexo-deployer-git --save --save-prod
 - npm install hexo-generator-feed --save --save-prod
 - npm install hexo-generator-sitemap --save --save-prod
 
 install:
-- rm -rf node_modules/ && npm install
+- npm install
 
 # Notice: Replace 'YOUR NAME' and 'YOUR EMAIL'
 before_script:

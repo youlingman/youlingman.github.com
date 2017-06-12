@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>cyl&#39;s blog</title>
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://youlingman.info/"/>
+  <updated>2017-06-12T15:48:09.715Z</updated>
+  <id>http://youlingman.info/</id>
+  
+  <author>
+    <name>youlingman</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>HttpURLConnection和webview的协同使用</title>
+    <link href="http://youlingman.info/2017/03/27/HttpURLConnection-and-webview/"/>
+    <id>http://youlingman.info/2017/03/27/HttpURLConnection-and-webview/</id>
+    <published>2017-03-27T06:34:40.000Z</published>
+    <updated>2017-06-12T15:48:09.715Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="webview中使用post加载"><a href="#webview中使用post加载" class="headerlink" title="webview中使用post加载"></a>webview中使用post加载</h3><p>在项目中遇到一个需求，需要在android的webview中对特定请求（其实就是第一次打开webview的时候）进行可自定义header的post请求，而原生webview提供的post API是这样的：</p>
+<pre><code>public void postUrl(String url, byte[] postData);
+</code></pre><p>不可以自定义header，反观get API可以自定义header，真让人头大。</p>
+<pre><code>void loadUrl (String url, 
+            Map&lt;String, String&gt; additionalHttpHeaders)
+</code></pre><a id="more"></a>
+<p>网上找了一轮，有以下几种实现思路：</p>
+<ul>
+<li>自定义WebViewClient，里面可以统一拦截请求并实现对应处理逻辑，这里的问题是需要额外规则来适配特定的请求；</li>
+<li>重写webview，为了这个小需求重写webview不太现实；</li>
+<li>手写http post请求，然后使用webview的loadData方法加载返回内容；</li>
+</ul>
+<p>由于开发框架封了一个公共的webview，对webview或者webviewclient的改动可能会影响到其它业务组件，最后决定对第一次请求，使用HttpURLConnection手动post请求，然后打开webview并把返回的内容（HTML文本）load进去，对原有逻辑影响最小。</p>
+<p>webview可以认为是基于webkit的浏览器客户端，里面封装好了对请求的相关处理，单独实现请求还需要注意相关的特殊处理，下面是踩过的两个坑。</p>
+<h3 id="HttpURLConnection和webview协同-重定向处理"><a href="#HttpURLConnection和webview协同-重定向处理" class="headerlink" title="HttpURLConnection和webview协同-重定向处理"></a>HttpURLConnection和webview协同-重定向处理</h3><p>HttpURLConnection有一个方法setInstanceFollowRedirects可以设置是否自动follow重定向。</p>
+<pre><code>public void setInstanceFollowRedirects(boolean followRedirects)
+</code></pre><p>但是如果原URL是http而目标URL是https的话这个方法是不能自动跳转的，搜了下<a href="http://bugs.java.com/bugdatabase/view_bug.do?bug_id=4620571" target="_blank" rel="external">这里</a>提到java由于安全原因不允许不同协议间的自动重定向跳转，需要应用层面去实现各自的重定向逻辑。</p>
+<p>实现逻辑很简单，就是判一下返回码，如果为重定向的返回码，则把header里Location域的url取出来load进webview里。</p>
+<h3 id="HttpURLConnection和webview协同-cookie处理"><a href="#HttpURLConnection和webview协同-cookie处理" class="headerlink" title="HttpURLConnection和webview协同-cookie处理"></a>HttpURLConnection和webview协同-cookie处理</h3><p>根据官方文档，android应用的webview实例的cookie都是由<a href="https://developer.android.com/reference/android/webkit/CookieManager.html" target="_blank" rel="external">CookieManager</a>来管理的，因此HttpURLConnection请求返回的cookie需要同步到CookieManager里，然后这个CookieManager里面坑不少，主要有以下几个：</p>
+<ul>
+<li>如果http response里返了多条cookie，需要调用多次setCookie方法来完成设置；</li>
+<li>setCookie方法设置的cookie要带上path信息，否则webview里的ajax请求不能同步到对应cookie（这个setCookie方法为啥不提供一个接受HttpCookie类型参数的签名呢，只接受String类型的参数用起来太不方便了）；</li>
+<li>在低于21的SDK版本里，CookieManager的removeSessionCookie方法和CookieSyncManager的sync方法是<strong>非阻塞异步操作</strong>，而且具体逻辑封起来了，没办法进行有效的线程同步，这意味着啥呢，就是说可能cookie设置完了然后removeSessionCookie方法才被调用，然后刚设置好的cookie就被清掉了，或者前一个请求的cookie还没设置完呢后续页面已经打开了，然后前一个请求的cookie就没办法同步到后续页面里。解决方案十分暴力，就是当系统SDK版本低于21时，在removeSessionCookie方法和sync方法后面sleep上300到500ms，亲测有效。</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;webview中使用post加载&quot;&gt;&lt;a href=&quot;#webview中使用post加载&quot; class=&quot;headerlink&quot; title=&quot;webview中使用post加载&quot;&gt;&lt;/a&gt;webview中使用post加载&lt;/h3&gt;&lt;p&gt;在项目中遇到一个需求，需要在android的webview中对特定请求（其实就是第一次打开webview的时候）进行可自定义header的post请求，而原生webview提供的post API是这样的：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;public void postUrl(String url, byte[] postData);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;不可以自定义header，反观get API可以自定义header，真让人头大。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;void loadUrl (String url, 
+            Map&amp;lt;String, String&amp;gt; additionalHttpHeaders)
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="android" scheme="http://youlingman.info/tags/android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>scala中的延迟求值</title>
+    <link href="http://youlingman.info/2017/02/15/lazy_evalutaion_in_scala/"/>
+    <id>http://youlingman.info/2017/02/15/lazy_evalutaion_in_scala/</id>
+    <published>2017-02-15T11:57:30.000Z</published>
+    <updated>2017-06-12T15:48:09.715Z</updated>
+    
+    <content type="html"><![CDATA[<p>在做<a href="http://aperiodic.net/phil/scala/s-99/" target="_blank" rel="external">scala99</a>的P91 Knight’s tour时，需要递归搜索整个解题空间找到所有可能的解，如果只想要得到部分解，就要先算出全量解再作筛选，这样就要作多余的运算了。在其他编程语言一般利用控制流来实现，即利用if-else条件判断和return返回提前终止搜索过程，而在scala里更functional的写法是利用延迟求值，这里整理下相关的概念。<br><a id="more"></a></p>
+<h3 id="求值策略"><a href="#求值策略" class="headerlink" title="求值策略"></a>求值策略</h3><p>表达式本身是递归定义的，一个表达式一般由子表达式、运算符、保留关键字等构成，所以对表达式的求值也需要递归去执行。SICP里提到两种求值策略，应用序 (applicative-order) 求值和正则序 (normal-order) 求值，如果将表达式展开成一棵符号树，这两种不同的求值策略对应了对符号树的不同的遍历和规约策略。</p>
+<ul>
+<li>应用序 (applicative-order) ：以类似depth-first的搜索策略，展开表达式后求所有子表达式的值；</li>
+<li>正则序 (normal-order) ：以类似breadth-first的搜索策略，展开表达式，展开时只作参数的替换，只有当到达符号树的叶子节点时才执行求值/规约；</li>
+</ul>
+<p>在scala中，对函数的参数求值，对应应用序和正则序有call by value和call by name两种求值策略，默认使用call by value策略。根据维基的<a href="https://en.wikipedia.org/wiki/Evaluation_strategy" target="_blank" rel="external">Evaluation_strategy</a>，call by value是一种strict/eager求值，可以认为是在函数被调用时，函数的每个参数都会被求值，而call by name是一种non-strict/lazy求值，在函数被调用时将函数的参数展开，而参数的具体求值动作则仅在需要时进行，同时如果同一个参数被传入了多次，可能出现多次求值的情况。</p>
+<p>在scala 2.11.7上，分别实现参数为call by value和call by name的函数如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SimpleTest</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">callByValue</span></span>(a : <span class="type">Int</span>) = a</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">callByName</span></span>(a : =&gt; <span class="type">Int</span>) = a</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>反编译后得到的java代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">callByValue</span><span class="params">(<span class="keyword">int</span> a)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">return</span> a;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">callByName</span><span class="params">(Function0&lt;Object&gt; a)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">return</span> a.apply$mcI$sp();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看出call by name的参数被包裹成一个Function0对象，而对该参数的使用则转化成对该包裹函数的调用，表达式展开求值时传入的Function0对象自然不会被展开求值，被包裹的逻辑要到该函数对象被实际调用时才会执行，利用函数占位来代替参数就地展开求值达到call by name的效果。</p>
+<p>看起来scala里的call by name语法和无参匿名函数的语法很相似，试试以无参函数作为参数，实现一个伪call by name的函数如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">fakeCallByName</span></span>(a : () =&gt; <span class="type">Int</span>) = a.apply</div></pre></td></tr></table></figure>
+<p>反编译结果如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">fakeCallByName</span><span class="params">(Function0&lt;Object&gt; a)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">return</span> a.apply$mcI$sp();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>无参函数作为参数和call by name参数反编译出来的代码是等价的，感觉scala利用了函数作为语法糖来实现call by name。</p>
+<h3 id="var-val和def"><a href="#var-val和def" class="headerlink" title="var/val和def"></a>var/val和def</h3><p>有些文章提到val/var和def前缀都可以用来定义变量，其中def利用了call by name，如以下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">scala&gt; val v_val = &#123;</div><div class="line">     |     println(&quot;println in val&quot;)</div><div class="line">     |     2</div><div class="line">     |   &#125;</div><div class="line">println in val</div><div class="line">v_val: Int = 2</div><div class="line"></div><div class="line">scala&gt;   var v_var = &#123;</div><div class="line">     |     println(&quot;println in var&quot;)</div><div class="line">     |     2</div><div class="line">     |   &#125;</div><div class="line">println in var</div><div class="line">v_var: Int = 2</div><div class="line"></div><div class="line">scala&gt;   def v_def = &#123;</div><div class="line">     |     println(&quot;println in def&quot;)</div><div class="line">     |     2</div><div class="line">     |   &#125;</div><div class="line">v_def: Int</div><div class="line"></div><div class="line">scala&gt; v_def</div><div class="line">println in def</div><div class="line">res0: Int = 2</div><div class="line"></div><div class="line">scala&gt; v_def</div><div class="line">println in def</div><div class="line">res0: Int = 2</div></pre></td></tr></table></figure>
+<p>在实际执行时，”println in def”只有到v_def被实际使用到时才会打印出来，且每次使用到v_def都会执行println语句，而”println in val”和”println in var”则在执行到对应变量赋值语句时就会马上打印出来，反编译得到java代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleTest</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> v_val;</div><div class="line">  <span class="keyword">private</span> <span class="keyword">int</span> v_var;</div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">v_val</span><span class="params">()</span></span></div><div class="line">  &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.v_val;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="keyword">public</span> <span class="keyword">void</span> v_var_$eq(<span class="keyword">int</span> x$<span class="number">1</span>)</div><div class="line">  &#123;</div><div class="line">    <span class="keyword">this</span>.v_var = x$<span class="number">1</span>;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">v_var</span><span class="params">()</span></span></div><div class="line">  &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.v_var;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="title">SimpleTest</span><span class="params">()</span></span></div><div class="line">  &#123;</div><div class="line">    Predef..MODULE$.println(<span class="string">"println in val"</span>);<span class="keyword">this</span>.v_val = </div><div class="line">      <span class="number">2</span>;</div><div class="line">    </div><div class="line"></div><div class="line">    Predef..MODULE$.println(<span class="string">"println in var"</span>);<span class="keyword">this</span>.v_var = </div><div class="line">      <span class="number">2</span>;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">v_def</span><span class="params">()</span></span></div><div class="line">  &#123;</div><div class="line">    Predef..MODULE$.println(<span class="string">"println in def"</span>);</div><div class="line">    <span class="keyword">return</span> <span class="number">2</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>var和val变量的右值表达式执行和变量赋值放在的当前类的构造函数内，而def定义的‘变量’则没有对应的java变量，而是把右值表达式放在一个函数内执行，并将函数的返回值作为‘变量’的值。</p>
+<p>总结一下，scala里的call by name的思路是将参数/变量的表达式放在一个函数里，变成一个类似“生成器”的东西，因此表达式的执行可以延迟到函数被调用的时候，实现延迟求值。</p>
+<h3 id="lazy关键字"><a href="#lazy关键字" class="headerlink" title="lazy关键字"></a>lazy关键字</h3><p>scala里的lazy关键字也可以实现延迟求值的效果，下面这一段代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">scala&gt; def v_def = &#123;</div><div class="line">     |     println(&quot;println in def&quot;)</div><div class="line">     |     2</div><div class="line">     |   &#125;</div><div class="line">v_def: Int</div><div class="line"></div><div class="line">scala&gt;   lazy val v_lval = &#123;</div><div class="line">     |     println(&quot;println in def&quot;)</div><div class="line">     |     2</div><div class="line">     |   &#125;</div><div class="line">v_lval: Int = &lt;lazy&gt;</div><div class="line"></div><div class="line">scala&gt; v_def</div><div class="line">println in def</div><div class="line">res0: Int = 2</div><div class="line"></div><div class="line">scala&gt; v_def</div><div class="line">println in def</div><div class="line">res1: Int = 2</div><div class="line"></div><div class="line">scala&gt; v_lval</div><div class="line">println in def</div><div class="line">res2: Int = 2</div><div class="line"></div><div class="line">scala&gt; v_lval</div><div class="line">res3: Int = 2</div></pre></td></tr></table></figure>
+<p>lazy修饰的val变量也可以实现和def类似的延迟求值效果，不同在于v_def对应的表达式在每次被用到时都会执行一次，而v_lval对应的表达式则只会在第一次被用到时被执行，继续看看反编译出来的java代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleTest</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">private</span> <span class="keyword">int</span> v_lval;</div><div class="line">  <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> bitmap$<span class="number">0</span>;</div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">v_def</span><span class="params">()</span></span></div><div class="line">  &#123;</div><div class="line">    Predef..MODULE$.println(<span class="string">"println in def"</span>);</div><div class="line">    <span class="keyword">return</span> <span class="number">2</span>;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">v_lval</span><span class="params">()</span></span></div><div class="line">  &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.bitmap$<span class="number">0</span> ? <span class="keyword">this</span>.v_lval : v_lval$lzycompute();</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="keyword">private</span> <span class="keyword">int</span> v_lval$lzycompute()</div><div class="line">  &#123;</div><div class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>)</div><div class="line">    &#123;</div><div class="line">      <span class="keyword">if</span> (!<span class="keyword">this</span>.bitmap$<span class="number">0</span>)</div><div class="line">      &#123;</div><div class="line">        Predef..MODULE$.println(<span class="string">"println in lazy val"</span>);<span class="keyword">this</span>.v_lval = <span class="number">2</span>;<span class="keyword">this</span>.bitmap$<span class="number">0</span> = <span class="keyword">true</span>;</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">return</span> <span class="keyword">this</span>.v_lval;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>用lazy关键字修饰的变量，scala编译器为该变量自动生成了一个类似double-check单例的机制，其中包括一个bitmap位图和lzycompute方法，当变量被用到时，利用bitmap位图中对应的bit来确定该变量是否已赋值，进而决定是调lzycompute方法执行对应表达式并赋值还是直接返回变量的值，一个类里利用一个bitmap位图来统一控制类里所有lazy变量的延迟执行。而由于lazy修饰的变量只能被初始化一次，用来修饰var变量是没有意义的，编译器直接会报错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">scala&gt; lazy var b = 2</div><div class="line">&lt;console&gt;:1: error: lazy not allowed here. Only vals can be lazy</div><div class="line">lazy var b = 2</div><div class="line">     ^</div></pre></td></tr></table></figure>
+<p>写不动了，下一篇再整理下Stream类。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在做&lt;a href=&quot;http://aperiodic.net/phil/scala/s-99/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;scala99&lt;/a&gt;的P91 Knight’s tour时，需要递归搜索整个解题空间找到所有可能的解，如果只想要得到部分解，就要先算出全量解再作筛选，这样就要作多余的运算了。在其他编程语言一般利用控制流来实现，即利用if-else条件判断和return返回提前终止搜索过程，而在scala里更functional的写法是利用延迟求值，这里整理下相关的概念。&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="scala" scheme="http://youlingman.info/tags/scala/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hello CYL</title>
+    <link href="http://youlingman.info/2017/01/31/Hello_CYL/"/>
+    <id>http://youlingman.info/2017/01/31/Hello_CYL/</id>
+    <published>2017-01-31T15:59:59.000Z</published>
+    <updated>2017-06-12T15:48:09.715Z</updated>
+    
+    <content type="html"><![CDATA[<p>封闭了大半年，喘过气来从新激活下这个hexo博客，感觉技术上的学习还是需要有一个地方记录下，尤其是工作中用不到的、自己学习的东西，也算是一种督促。</p>
+<p>新的一年，在这里给自己订个目标，希望能在这个博客记录下这几个方面的学习和总结吧：<br><a id="more"></a></p>
+<h5 id="函数式编程"><a href="#函数式编程" class="headerlink" title="函数式编程"></a>函数式编程</h5><p>之前学了一段时间scala后就拉下了，打算回头把scala99先解完，然后再继续学学scala的一些特性和常用库。有时间的话也许会看看SICP。</p>
+<h5 id="响应式编程"><a href="#响应式编程" class="headerlink" title="响应式编程"></a>响应式编程</h5><p>对这个概念挺感兴趣的，大概了解了下感觉和FP很类似，也许会在工作中尝试一下Rx。</p>
+<h5 id="机器学习"><a href="#机器学习" class="headerlink" title="机器学习"></a>机器学习</h5><p>有时间的话在kaggle上耍耍。</p>
+<hr>
+<p>最后附上搭建这个hexo博客的小记录吧，这个<a href="https://github.com/youlingman/youlingman.github.com" target="_blank" rel="external">博客</a>是放在Github User Pages上的hexo博客，使用了<a href="https://github.com/Alex-fun" target="_blank" rel="external">Alex-fun</a>的主题<a href="http://hejx.me/2016/02/07/hexo-theme-jane/" target="_blank" rel="external">jane</a>。</p>
+<p>搭建过程参考<a href="http://crazymilk.github.io/2015/12/28/GitHub-Pages-Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2" target="_blank" rel="external">这里</a>，使用同一个repo的两条分支，分别存放hexo元配置文件和生成的博客静态文件。</p>
+<p>然后利用了Travis CI实现自动更新和发布，参考了<a href="https://xin053.github.io/2016/06/05/Travis%20CI%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2Hexo%E5%8D%9A%E5%AE%A2%E5%88%B0Github/" target="_blank" rel="external">这里</a>。</p>
+<p>注意Github的personal access token只需要勾上public repo权限就可以完成推送，同时.travis.yml里的hexo deploy记得加上–silent选项，以避免在Travis CI的build log里暴露personal access token。</p>
+<p>edit：在travis执行hexo deploy之前，需要提前将hexo部署分支（即存放静态HTML文件的分支）clone到.deploy_git目录，否则<a href="https://github.com/hexojs/hexo-deployer-git" target="_blank" rel="external">hexo-deployer-git插件</a>会初始化一个空的.deploy_git目录然后force push，导致部署分支的历史提交记录被重置。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;封闭了大半年，喘过气来从新激活下这个hexo博客，感觉技术上的学习还是需要有一个地方记录下，尤其是工作中用不到的、自己学习的东西，也算是一种督促。&lt;/p&gt;
+&lt;p&gt;新的一年，在这里给自己订个目标，希望能在这个博客记录下这几个方面的学习和总结吧：&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="hexo" scheme="http://youlingman.info/tags/hexo/"/>
+    
+  </entry>
+  
+</feed>

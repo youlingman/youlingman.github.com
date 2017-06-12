@@ -69,12 +69,12 @@ disqus_shortname: youlingmaninfo
 theme: jane
 
 # Feed config
-feed:
-  type: atom
-  path: atom.xml
-  limit: 20
-  hub:
-  content:
+#feed:
+#  type: atom
+#  path: atom.xml
+#  limit: 20
+#  hub:
+#  content:
 
 # sitemap config
 sitemap:

@@ -14,8 +14,8 @@ before_install:
 #- npm install hexo --save --save-prod
 #- npm install hexo-cli --save --save-prod
 #- npm install hexo-deployer-git --save --save-prod
-#- npm install hexo-generator-feed --save --save-prod
-#- npm install hexo-generator-sitemap --save --save-prod
+- npm install hexo-generator-feed --save
+- npm install hexo-generator-sitemap@1.1.2 --save
 
 install:
 - npm install

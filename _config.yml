@@ -69,17 +69,17 @@ disqus_shortname: youlingmaninfo
 theme: jane
 
 # Feed config
-feed:
-  type: atom
-  path: atom.xml
-  limit: 20
-  hub:
-  content:
+#feed:
+#  type: atom
+#  path: atom.xml
+#  limit: 20
+#  hub:
+#  content:
 
 # sitemap config
-sitemap:
-    path: sitemap.xml
-    template: ./sitemap_template.xml
+#sitemap:
+#    path: sitemap.xml
+#    template: ./sitemap_template.xml
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html

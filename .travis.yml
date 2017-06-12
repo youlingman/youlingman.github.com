@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-- "node"
+- "7"
 
 branches:
   only:
@@ -11,11 +11,11 @@ before_install:
 - export TZ='Asia/Shanghai'
 #- npm install -g hexo
 - npm install -g hexo-cli
-- npm install hexo --save
+#- npm install hexo --save
 #- npm install hexo-cli --save
-- npm install hexo-deployer-git --save
+#- npm install hexo-deployer-git --save
 #- npm install hexo-generator-feed --save
-- npm install hexo-generator-sitemap --save
+#- npm install hexo-generator-sitemap --save
 
 install:
 - npm install

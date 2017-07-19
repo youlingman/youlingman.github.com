@@ -30,17 +30,48 @@ def fib(n):
 
 ### Stream：函数式、延迟计算
 
-在scala中，通过Stream可以获取对无穷序列的表达能力，这里的表达能力是指通过将序列的递推生成算法映射到Stream对象的构造逻辑，然后就可以指着这个Stream对象说它就是一个对应的无穷序列。下面从[Stream docs](https://www.scala-lang.org/api/current/scala/collection/immutable/Stream.html)抄了fibonacci序列的对应Stream对象（#::改成cons以便理解）。
+在scala中，通过Stream可以获得对无穷序列的表达能力，这里的表达能力是指通过将序列的递推生成算法映射到Stream对象的构造逻辑，然后就可以指着这个Stream对象说它就是一个对应的无穷序列。下面从[Stream docs](https://www.scala-lang.org/api/current/scala/collection/immutable/Stream.html)抄了fibonacci序列的对应Stream对象（#::改成cons以便理解）。
 
 ```scala
 scala> val fibs:Stream[Int] = Stream.cons(0, Stream.cons(1, fibs.zip(fibs.tail).map { n => n._1 + n._2 }))
 fibs2: Stream[Int] = Stream(0, ?)
 ```
 
-这里就不重复上一篇的源码剖析思路去分析Stream原理了，这里关注的点是，基于延迟计算和高阶函数，scala的Stream可以从较高的抽象层面去表达无穷序列（直接将递推算法映射到Stream对象里）。
+这里就不重复上一篇的源码剖析思路去分析Stream原理了，这里关注的点是，基于延迟计算和高阶函数，scala的Stream可以从较高的抽象层面去表达和处理无穷序列（直接将递推算法映射到Stream对象里）。
+
+而在非函数式语言里，一般的思路则是通过迭代和状态流（if-else-return）来实现对无穷序列的处理。
 
 ### generator：迭代器、协程
+
+在[Stream docs](https://www.scala-lang.org/api/current/scala/collection/immutable/Stream.html)里提到，当Stream被定义为val变量（而不是函数）时，其会缓存head（以及其它被访问过的元素），某些操作可能会在返回结果前产生大量的中间过程数据，从而占用大量内存。如果这些缓存是不必要的，docs推荐尽量使用迭代器。下面是Fibonacci序列的scala迭代器版本。
+
+```scala
+val it = new Iterator[Int] {
+  var a = 0
+  var b = 1
+  def hasNext = true
+  def next(): Int = { val c = b; b = a + b; a = c; a }
+}
+```
+
+这里就引出了生成无穷序列的另外一个思路：迭代器。不同于函数式编程的思路，迭代器从过程的角度来实现每一步的递推，引入可变量来保存每步递推的上下文，利用控制流（hasNext = true对应while true）来重复递推逻辑。
+
 
 
 
 [generator](https://en.wikipedia.org/wiki/Generator_(computer_programming))
+
+```python
+>>> def fib():
+...   a = 0
+...   b = 1
+...   while True:
+...     c = a + b
+...     a = b
+...     b = c
+...     yield a
+...
+>>> fibs = fib()
+>>> fibs
+<generator object fib at 0x0000000002BBBA68>
+```

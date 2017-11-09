@@ -2,10 +2,11 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>cyl&#39;s blog</title>
   
+  
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://youlingman.info/"/>
-  <updated>2017-07-20T12:32:57.520Z</updated>
+  <updated>2017-11-09T15:37:31.055Z</updated>
   <id>http://youlingman.info/</id>
   
   <author>
@@ -16,11 +17,31 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Trampoline和尾递归</title>
+    <link href="http://youlingman.info/2017/11/08/Trampoline/"/>
+    <id>http://youlingman.info/2017/11/08/Trampoline/</id>
+    <published>2017-11-08T12:00:35.000Z</published>
+    <updated>2017-11-09T15:37:31.055Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h3&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/timoxley/functional-javascript-workshop&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;nodeschool-Functional Javascript&lt;/a&gt;的第13题实现了一个repeat函数，其接收两个参数，函数operation和整数num，然后利用递归对operation调用num次。当num很大时，js会报一个Maximum call stack size exceeded的错误，说明递归太深，调用栈超出限制，第14题的任务就是用一个&lt;strong&gt;trampoline&lt;/strong&gt;函数去解决递归爆栈问题。然而这个trampoline到底是啥exercise里毛说明都木有。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="javascript" scheme="http://youlingman.info/tags/javascript/"/>
+    
+      <category term="functional" scheme="http://youlingman.info/tags/functional/"/>
+    
+  </entry>
+  
+  <entry>
     <title>scala中的Stream</title>
     <link href="http://youlingman.info/2017/07/01/stream_in_scala/"/>
     <id>http://youlingman.info/2017/07/01/stream_in_scala/</id>
     <published>2017-07-01T11:57:30.000Z</published>
-    <updated>2017-07-20T12:32:57.520Z</updated>
+    <updated>2017-11-09T15:37:31.059Z</updated>
     
     <summary type="html">
     
@@ -31,6 +52,8 @@
     
       <category term="scala" scheme="http://youlingman.info/tags/scala/"/>
     
+      <category term="functional" scheme="http://youlingman.info/tags/functional/"/>
+    
   </entry>
   
   <entry>
@@ -38,7 +61,7 @@
     <link href="http://youlingman.info/2017/03/27/HttpURLConnection-and-webview/"/>
     <id>http://youlingman.info/2017/03/27/HttpURLConnection-and-webview/</id>
     <published>2017-03-27T06:34:40.000Z</published>
-    <updated>2017-07-20T12:32:57.520Z</updated>
+    <updated>2017-11-09T15:37:31.055Z</updated>
     
     <summary type="html">
     
@@ -61,7 +84,7 @@
     <link href="http://youlingman.info/2017/02/15/lazy_evalutaion_in_scala/"/>
     <id>http://youlingman.info/2017/02/15/lazy_evalutaion_in_scala/</id>
     <published>2017-02-15T11:57:30.000Z</published>
-    <updated>2017-07-20T12:32:57.520Z</updated>
+    <updated>2017-11-09T15:37:31.055Z</updated>
     
     <summary type="html">
     
@@ -72,6 +95,8 @@
     
       <category term="scala" scheme="http://youlingman.info/tags/scala/"/>
     
+      <category term="functional" scheme="http://youlingman.info/tags/functional/"/>
+    
   </entry>
   
   <entry>
@@ -79,7 +104,7 @@
     <link href="http://youlingman.info/2017/01/31/Hello_CYL/"/>
     <id>http://youlingman.info/2017/01/31/Hello_CYL/</id>
     <published>2017-01-31T15:59:59.000Z</published>
-    <updated>2017-07-20T12:32:57.520Z</updated>
+    <updated>2017-11-09T15:37:31.055Z</updated>
     
     <summary type="html">
     

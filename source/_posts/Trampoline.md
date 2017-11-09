@@ -12,7 +12,7 @@ tags: [javascript,functional]
 
 ### 初探trampoline
 
-抄一下[wiki](https://en.wikipedia.org/wiki/Trampoline_(computing))对trampoline的定义如下：
+抄一下[wiki](https://en.wikipedia.org/wiki/Trampoline_(computing)对trampoline的定义如下：
 
 >As used in some Lisp implementations, a trampoline is a loop that iteratively invokes thunk-returning functions (continuation-passing style). A single trampoline suffices to express all control transfers of a program; a program so expressed is trampolined, or in trampolined style; converting a program to trampolined style is trampolining. Programmers can use trampolined functions to implement tail-recursive function calls in stack-oriented programming languages.
 

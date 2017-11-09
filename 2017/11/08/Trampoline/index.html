@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="cyl&#39;s blog">
 <meta property="og:description" content="前言nodeschool-Functional Javascript的第13题实现了一个repeat函数，其接收两个参数，函数operation和整数num，然后利用递归对operation调用num次。当num很大时，js会报一个Maximum call stack size exceeded的错误，说明递归太深，调用栈超出限制，第14题的任务就是用一个trampoline函数去解决递归爆栈问题">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-09T15:37:31.055Z">
+<meta property="og:updated_time" content="2017-11-09T15:41:37.564Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Trampoline和尾递归">
 <meta name="twitter:description" content="前言nodeschool-Functional Javascript的第13题实现了一个repeat函数，其接收两个参数，函数operation和整数num，然后利用递归对operation调用num次。当num很大时，js会报一个Maximum call stack size exceeded的错误，说明递归太深，调用栈超出限制，第14题的任务就是用一个trampoline函数去解决递归爆栈问题">
@@ -69,7 +69,7 @@ ga('send', 'pageview');
       
         <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p><a href="https://github.com/timoxley/functional-javascript-workshop" target="_blank" rel="external">nodeschool-Functional Javascript</a>的第13题实现了一个repeat函数，其接收两个参数，函数operation和整数num，然后利用递归对operation调用num次。当num很大时，js会报一个Maximum call stack size exceeded的错误，说明递归太深，调用栈超出限制，第14题的任务就是用一个<strong>trampoline</strong>函数去解决递归爆栈问题。然而这个trampoline到底是啥exercise里毛说明都木有。</p>
 <a id="more"></a>
-<h3 id="初探trampoline"><a href="#初探trampoline" class="headerlink" title="初探trampoline"></a>初探trampoline</h3><p>抄一下<a href="https://en.wikipedia.org/wiki/Trampoline_(computing" target="_blank" rel="external">wiki</a>)对trampoline的定义如下：</p>
+<h3 id="初探trampoline"><a href="#初探trampoline" class="headerlink" title="初探trampoline"></a>初探trampoline</h3><p>抄一下<a href="https://en.wikipedia.org/wiki/Trampoline_(computing" target="_blank" rel="external">wiki</a>对trampoline的定义如下：</p>
 <blockquote>
 <p>As used in some Lisp implementations, a trampoline is a loop that iteratively invokes thunk-returning functions (continuation-passing style). A single trampoline suffices to express all control transfers of a program; a program so expressed is trampolined, or in trampolined style; converting a program to trampolined style is trampolining. Programmers can use trampolined functions to implement tail-recursive function calls in stack-oriented programming languages.</p>
 </blockquote>

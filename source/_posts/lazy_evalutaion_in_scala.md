@@ -1,7 +1,7 @@
 ---
 title: scala中的延迟求值
 date: 2017-02-15 19:57:30
-tags: [scala]
+tags: [scala,functional]
 ---
 在做[scala99](http://aperiodic.net/phil/scala/s-99/)的P91 Knight's tour时，需要递归搜索整个解题空间找到所有可能的解，如果只想要得到部分解，就要先算出全量解再作筛选，这样就要作多余的运算了。在其他编程语言一般利用控制流来实现，即利用if-else条件判断和return返回提前终止搜索过程，而在scala里更functional的写法是利用延迟求值，这里整理下相关的概念。
 <!--more-->

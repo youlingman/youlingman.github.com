@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="cyl&#39;s blog">
 <meta property="og:description" content="前言nodeschool-Functional Javascript的第13题实现了一个repeat函数，其接收两个参数，函数operation和整数num，然后利用递归对operation调用num次。当num很大时，js会报一个Maximum call stack size exceeded的错误，说明递归太深，调用栈超出限制，第14题的任务就是用一个trampoline函数去解决递归爆栈问题">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-09T15:41:37.564Z">
+<meta property="og:updated_time" content="2018-03-26T14:16:09.863Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Trampoline和尾递归">
 <meta name="twitter:description" content="前言nodeschool-Functional Javascript的第13题实现了一个repeat函数，其接收两个参数，函数operation和整数num，然后利用递归对operation调用num次。当num很大时，js会报一个Maximum call stack size exceeded的错误，说明递归太深，调用栈超出限制，第14题的任务就是用一个trampoline函数去解决递归爆栈问题">
@@ -67,19 +67,19 @@ ga('send', 'pageview');
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p><a href="https://github.com/timoxley/functional-javascript-workshop" target="_blank" rel="external">nodeschool-Functional Javascript</a>的第13题实现了一个repeat函数，其接收两个参数，函数operation和整数num，然后利用递归对operation调用num次。当num很大时，js会报一个Maximum call stack size exceeded的错误，说明递归太深，调用栈超出限制，第14题的任务就是用一个<strong>trampoline</strong>函数去解决递归爆栈问题。然而这个trampoline到底是啥exercise里毛说明都木有。</p>
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p><a href="https://github.com/timoxley/functional-javascript-workshop" target="_blank" rel="noopener">nodeschool-Functional Javascript</a>的第13题实现了一个repeat函数，其接收两个参数，函数operation和整数num，然后利用递归对operation调用num次。当num很大时，js会报一个Maximum call stack size exceeded的错误，说明递归太深，调用栈超出限制，第14题的任务就是用一个<strong>trampoline</strong>函数去解决递归爆栈问题。然而这个trampoline到底是啥exercise里毛说明都木有。</p>
 <a id="more"></a>
-<h3 id="初探trampoline"><a href="#初探trampoline" class="headerlink" title="初探trampoline"></a>初探trampoline</h3><p>抄一下<a href="https://en.wikipedia.org/wiki/Trampoline_(computing" target="_blank" rel="external">wiki</a>对trampoline的定义如下：</p>
+<h3 id="初探trampoline"><a href="#初探trampoline" class="headerlink" title="初探trampoline"></a>初探trampoline</h3><p>抄一下<a href="https://en.wikipedia.org/wiki/Trampoline_(computing" target="_blank" rel="noopener">wiki</a>对trampoline的定义如下：</p>
 <blockquote>
 <p>As used in some Lisp implementations, a trampoline is a loop that iteratively invokes thunk-returning functions (continuation-passing style). A single trampoline suffices to express all control transfers of a program; a program so expressed is trampolined, or in trampolined style; converting a program to trampolined style is trampolining. Programmers can use trampolined functions to implement tail-recursive function calls in stack-oriented programming languages.</p>
 </blockquote>
 <p>翻译过来就是，函数式语言里的trampoline一般是个循环，这个循环迭代地调用某些函数，这些函数会返回一个 <strong>thunk</strong> （？），这又被称为 <strong>continuation-passing style</strong> （？）。然后码农可以在基于栈的编程语言里利用这个trampoline实现<strong>尾递归</strong>函数。</p>
-<h3 id="thunk"><a href="#thunk" class="headerlink" title="thunk"></a>thunk</h3><p>继续搬运<a href="https://en.wikipedia.org/wiki/Thunk_(functional_programming" target="_blank" rel="external">wiki</a>)的对应内容，thunk起源于call-by-name求值策略，call-by-name指函数的参数在函数被调用（该参数被实际访问到）时才对参数求值，而一般实现上会在表达式求值时将call-by-name参数出现的地方作类似inline展开的操作，这样会导致存在参数表达式的多份副本。因此对call-by-name参数，编译器会生成一个helper把参数表达式塞进去，用来统一计算并返回该变量的值，这个helper就是thunk，在此基础上编译器还可以将thunk的计算结果缓存起来消除重复计算。</p>
+<h3 id="thunk"><a href="#thunk" class="headerlink" title="thunk"></a>thunk</h3><p>继续搬运<a href="https://en.wikipedia.org/wiki/Thunk_(functional_programming" target="_blank" rel="noopener">wiki</a>)的对应内容，thunk起源于call-by-name求值策略，call-by-name指函数的参数在函数被调用（该参数被实际访问到）时才对参数求值，而一般实现上会在表达式求值时将call-by-name参数出现的地方作类似inline展开的操作，这样会导致存在参数表达式的多份副本。因此对call-by-name参数，编译器会生成一个helper把参数表达式塞进去，用来统一计算并返回该变量的值，这个helper就是thunk，在此基础上编译器还可以将thunk的计算结果缓存起来消除重复计算。</p>
 <p>我们也可以显示地生成thunk，方法就是<strong>将参数表达式用无参匿名函数包起来</strong>。</p>
-<h3 id="continuation-passing-style"><a href="#continuation-passing-style" class="headerlink" title="continuation-passing style"></a>continuation-passing style</h3><p>这个概念不大好理解，<a href="https://en.wikipedia.org/wiki/Continuation-passing_style" target="_blank" rel="external">wiki</a>的说法continuation-passing style和direct style相对应，continuation-passing style的函数会接收一个额外的函数变量continuation，direct style的函数执行完毕时会将结果return给调用方，而continuation-passing风格的函数执行完毕时则将结果作为参数传入并调用continuation变量对应的函数。</p>
+<h3 id="continuation-passing-style"><a href="#continuation-passing-style" class="headerlink" title="continuation-passing style"></a>continuation-passing style</h3><p>这个概念不大好理解，<a href="https://en.wikipedia.org/wiki/Continuation-passing_style" target="_blank" rel="noopener">wiki</a>的说法continuation-passing style和direct style相对应，continuation-passing style的函数会接收一个额外的函数变量continuation，direct style的函数执行完毕时会将结果return给调用方，而continuation-passing风格的函数执行完毕时则将结果作为参数传入并调用continuation变量对应的函数。</p>
 <p>下面列一下wiki上两种风格函数的实现。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">direct style</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">pyth</span>(<span class="params">x, y</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="built_in">Math</span>.sqrt(x * x + y * y);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">continuation-passing style</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">pyth</span>(<span class="params">x, y, continuation</span>) </span>&#123;</span><br><span class="line">	(<span class="function"><span class="keyword">function</span>(<span class="params">con1</span>) </span>&#123;</span><br><span class="line">		con1(x * x);</span><br><span class="line">	&#125;)(<span class="function"><span class="keyword">function</span>(<span class="params">x2</span>) </span>&#123;</span><br><span class="line">		(<span class="function"><span class="keyword">function</span>(<span class="params">x2, con2</span>) </span>&#123;</span><br><span class="line">			con2(y * y);</span><br><span class="line">		&#125;)(x2, <span class="function"><span class="keyword">function</span>(<span class="params">y2</span>) </span>&#123;</span><br><span class="line">			(<span class="function"><span class="keyword">function</span>(<span class="params">x2, y2, con3</span>) </span>&#123;</span><br><span class="line">				con3(x2 + y2);</span><br><span class="line">			&#125;)(x2, y2, <span class="function"><span class="keyword">function</span>(<span class="params">x2py2</span>) </span>&#123;</span><br><span class="line">				(<span class="function"><span class="keyword">function</span>(<span class="params">x2py2, con4</span>) </span>&#123;</span><br><span class="line">					con4(<span class="built_in">Math</span>.sqrt(x2py2));</span><br><span class="line">				&#125;)(x2py2, continuation);</span><br><span class="line">			&#125;)</span><br><span class="line">		&#125;)</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>实现了下wiki实例代码的javascript版本，试着理解CPS的思路，大概是将逻辑/控制的语句/块封成一个个函数，由于上一个函数结束时会将结果传递到下一个函数，分散的逻辑/控制块就可以被串成线性的逻辑/控制流。<a href="https://en.wikipedia.org/wiki/Continuation" target="_blank" rel="external">Continuation的wiki</a>提到continuation实质上是函数式版本的goto。</p>
+<p>实现了下wiki实例代码的javascript版本，试着理解CPS的思路，大概是将逻辑/控制的语句/块封成一个个函数，由于上一个函数结束时会将结果传递到下一个函数，分散的逻辑/控制块就可以被串成线性的逻辑/控制流。<a href="https://en.wikipedia.org/wiki/Continuation" target="_blank" rel="noopener">Continuation的wiki</a>提到continuation实质上是函数式版本的goto。</p>
 <p>由于CPS函数的最后一步永远是函数调用（调用传入的新函数或者调用自身），这种情况被称为尾调用（如果是调用自身则叫做尾递归）。而在CPS的wiki里Use and implementation节找到下面这句话。</p>
 <blockquote>
 <p>Without tail-call optimization, techniques such as trampolining, i.e. using a loop that iteratively invokes thunk-returning functions, can be used;</p>
@@ -95,7 +95,7 @@ ga('send', 'pageview');
 <li>对于尾递归来说，其调用栈是通过迭代地调用自身来构造的；</li>
 <li>trampoline是一种通过迭代地调用特定函数的方式，可以用来实现尾递归，这些特定函数会返回一个thunk，即无参匿名函数；</li>
 </ul>
-<p>到这里trampoline的思路就比较清楚了。尾递归函数通过在执行结束时<strong>同步地</strong>调用自身，利用函数调用栈迭代地构造和遍历串行函数流；而对应的trampoline版本，则改写了尾递归函数，在函数执行完毕时将下一步调用自身的操作封装成一个thunk并返回，对应迭代调用自身的操作交由上一层的循环统一处理。以这道exercise14为例，solution的核心思路就是：</p>
+<p>到这里trampoline的思路就比较清楚了。尾递归函数通过在执行结束时<strong>同步地</strong>调用自身，利用函数调用栈迭代地构造和遍历串行函数流；而对应的trampoline版本，则改写了尾递归函数，在函数执行完毕时将下一步调用自身的操作封装成一个thunk并返回（对于CPS来说这个thunk对应的就是下一步的continuation），对应迭代调用自身的操作交由上一层的循环统一处理。以这道exercise14为例，solution的核心思路就是：</p>
 <blockquote>
 <p>把尾递归函数改写成一个对应串行函数流的‘迭代器’，trampoline遍历这个‘迭代器’实现对串行函数流的遍历调用。这个‘迭代器’代替了函数调用栈的作用，因此解决了调用尾递归函数时调用栈超限的问题。</p>
 </blockquote>
@@ -109,6 +109,15 @@ ga('send', 'pageview');
   
     
 <nav id="article-nav">
+  
+    <a href="/2018/03/26/android_handler/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
   
   
     <a href="/2017/07/01/stream_in_scala/" id="article-nav-older" class="article-nav-link-wrap">
@@ -162,7 +171,7 @@ ga('send', 'pageview');
       <footer id="footer">
   
 	<div id="footer-info" class="inner">
-	  &copy; 2017 youlingman 
+	  &copy; 2018 youlingman 
 	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	  - Theme <a href="https://github.com/Alex-fun/hexo-theme-jane/" target="_blank">Jane</a>
 	</div>

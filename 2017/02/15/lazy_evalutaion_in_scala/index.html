@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="cyl&#39;s blog">
 <meta property="og:description" content="在做scala99的P91 Knight’s tour时，需要递归搜索整个解题空间找到所有可能的解，如果只想要得到部分解，就要先算出全量解再作筛选，这样就要作多余的运算了。在其他编程语言一般利用控制流来实现，即利用if-else条件判断和return返回提前终止搜索过程，而在scala里更functional的写法是利用延迟求值，这里整理下相关的概念。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-09T15:41:37.564Z">
+<meta property="og:updated_time" content="2018-03-26T14:16:09.863Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="scala中的延迟求值">
 <meta name="twitter:description" content="在做scala99的P91 Knight’s tour时，需要递归搜索整个解题空间找到所有可能的解，如果只想要得到部分解，就要先算出全量解再作筛选，这样就要作多余的运算了。在其他编程语言一般利用控制流来实现，即利用if-else条件判断和return返回提前终止搜索过程，而在scala里更functional的写法是利用延迟求值，这里整理下相关的概念。">
@@ -67,13 +67,13 @@ ga('send', 'pageview');
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在做<a href="http://aperiodic.net/phil/scala/s-99/" target="_blank" rel="external">scala99</a>的P91 Knight’s tour时，需要递归搜索整个解题空间找到所有可能的解，如果只想要得到部分解，就要先算出全量解再作筛选，这样就要作多余的运算了。在其他编程语言一般利用控制流来实现，即利用if-else条件判断和return返回提前终止搜索过程，而在scala里更functional的写法是利用延迟求值，这里整理下相关的概念。<br><a id="more"></a></p>
+        <p>在做<a href="http://aperiodic.net/phil/scala/s-99/" target="_blank" rel="noopener">scala99</a>的P91 Knight’s tour时，需要递归搜索整个解题空间找到所有可能的解，如果只想要得到部分解，就要先算出全量解再作筛选，这样就要作多余的运算了。在其他编程语言一般利用控制流来实现，即利用if-else条件判断和return返回提前终止搜索过程，而在scala里更functional的写法是利用延迟求值，这里整理下相关的概念。<br><a id="more"></a></p>
 <h3 id="求值策略"><a href="#求值策略" class="headerlink" title="求值策略"></a>求值策略</h3><p>表达式本身是递归定义的，一个表达式一般由子表达式、运算符、保留关键字等构成，所以对表达式的求值也需要递归去执行。SICP里提到两种求值策略，应用序 (applicative-order) 求值和正则序 (normal-order) 求值，如果将表达式展开成一棵符号树，这两种不同的求值策略对应了对符号树的不同的遍历和规约策略。</p>
 <ul>
 <li>应用序 (applicative-order) ：以类似depth-first的搜索策略，展开表达式后求所有子表达式的值；</li>
 <li>正则序 (normal-order) ：以类似breadth-first的搜索策略，展开表达式，展开时只作参数的替换，只有当到达符号树的叶子节点时才执行求值/规约；</li>
 </ul>
-<p>在scala中，对函数的参数求值，对应应用序和正则序有call by value和call by name两种求值策略，默认使用call by value策略。根据维基的<a href="https://en.wikipedia.org/wiki/Evaluation_strategy" target="_blank" rel="external">Evaluation_strategy</a>，call by value是一种strict/eager求值，可以认为是在函数被调用时，函数的每个参数都会被求值，而call by name是一种non-strict/lazy求值，在函数被调用时将函数的参数展开，而参数的具体求值动作则仅在需要时进行，同时如果同一个参数被传入了多次，可能出现多次求值的情况。</p>
+<p>在scala中，对函数的参数求值，对应应用序和正则序有call by value和call by name两种求值策略，默认使用call by value策略。根据维基的<a href="https://en.wikipedia.org/wiki/Evaluation_strategy" target="_blank" rel="noopener">Evaluation_strategy</a>，call by value是一种strict/eager求值，可以认为是在函数被调用时，函数的每个参数都会被求值，而call by name是一种non-strict/lazy求值，在函数被调用时将函数的参数展开，而参数的具体求值动作则仅在需要时进行，同时如果同一个参数被传入了多次，可能出现多次求值的情况。</p>
 <p>在scala 2.11.7上，分别实现参数为call by value和call by name的函数如下：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SimpleTest</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">callByValue</span></span>(a : <span class="type">Int</span>) = a</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">callByName</span></span>(a : =&gt; <span class="type">Int</span>) = a</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>反编译后得到的java代码如下：</p>
@@ -169,7 +169,7 @@ ga('send', 'pageview');
       <footer id="footer">
   
 	<div id="footer-info" class="inner">
-	  &copy; 2017 youlingman 
+	  &copy; 2018 youlingman 
 	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	  - Theme <a href="https://github.com/Alex-fun/hexo-theme-jane/" target="_blank">Jane</a>
 	</div>

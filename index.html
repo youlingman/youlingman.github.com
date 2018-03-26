@@ -42,6 +42,35 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-android_handler" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+    <div class="article-meta">
+      <a href="/2018/03/26/android_handler/" class="article-date">
+  <time datetime="2018-03-26T14:16:09.863Z" itemprop="datePublished">2018-03-26</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在Android应用里，谷歌只允许在主线程即UI线程更新UI，在这个主线程里做一些耗时的操作会导致<a href="https://developer.android.com/topic/performance/vitals/anr.html" target="_blank" rel="noopener">ANR</a>，于是一些耗时间的操作，如网络请求，就需要搬到额外线程去执行，而耗时操作之后往往又需要返回主/UI线程去更新UI。针对这个场景Android提供了一些组件给开发者使用，包括Handler、HandlerThread和AsyncTask，后两者其实都是基于Handler的实现。</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/03/26/android_handler/#more">More...</a>
+          </p>
+        
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Trampoline" class="article article-type-post" itemscope itemprop="blogPost">
   
   <div class="article-inner">
@@ -64,7 +93,7 @@ ga('send', 'pageview');
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p><a href="https://github.com/timoxley/functional-javascript-workshop" target="_blank" rel="external">nodeschool-Functional Javascript</a>的第13题实现了一个repeat函数，其接收两个参数，函数operation和整数num，然后利用递归对operation调用num次。当num很大时，js会报一个Maximum call stack size exceeded的错误，说明递归太深，调用栈超出限制，第14题的任务就是用一个<strong>trampoline</strong>函数去解决递归爆栈问题。然而这个trampoline到底是啥exercise里毛说明都木有。</p>
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p><a href="https://github.com/timoxley/functional-javascript-workshop" target="_blank" rel="noopener">nodeschool-Functional Javascript</a>的第13题实现了一个repeat函数，其接收两个参数，函数operation和整数num，然后利用递归对operation调用num次。当num很大时，js会报一个Maximum call stack size exceeded的错误，说明递归太深，调用栈超出限制，第14题的任务就是用一个<strong>trampoline</strong>函数去解决递归爆栈问题。然而这个trampoline到底是啥exercise里毛说明都木有。</p>
         
           <p class="article-more-link">
             <a href="/2017/11/08/Trampoline/#more">More...</a>
@@ -103,7 +132,7 @@ ga('send', 'pageview');
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在之前<a href="http://youlingman.info/2017/02/15/lazy_evalutaion_in_scala/">scala中的延迟求值</a>中提到，在使用递归遍历的方法解<a href="https://en.wikipedia.org/wiki/Knight%27s_tour" target="_blank" rel="external">骑士巡游问题</a>时，可以利用延迟求值的方法来获取需要的部分解（而不用依赖if-else等条件控制流），scala提供了一个lazy list来支持按需计算，称为Stream，这里整理一下相关用法和原理。<br>
+        <p>在之前<a href="http://youlingman.info/2017/02/15/lazy_evalutaion_in_scala/">scala中的延迟求值</a>中提到，在使用递归遍历的方法解<a href="https://en.wikipedia.org/wiki/Knight%27s_tour" target="_blank" rel="noopener">骑士巡游问题</a>时，可以利用延迟求值的方法来获取需要的部分解（而不用依赖if-else等条件控制流），scala提供了一个lazy list来支持按需计算，称为Stream，这里整理一下相关用法和原理。<br>
         
           <p class="article-more-link">
             <a href="/2017/07/01/stream_in_scala/#more">More...</a>
@@ -186,7 +215,7 @@ ga('send', 'pageview');
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在做<a href="http://aperiodic.net/phil/scala/s-99/" target="_blank" rel="external">scala99</a>的P91 Knight’s tour时，需要递归搜索整个解题空间找到所有可能的解，如果只想要得到部分解，就要先算出全量解再作筛选，这样就要作多余的运算了。在其他编程语言一般利用控制流来实现，即利用if-else条件判断和return返回提前终止搜索过程，而在scala里更functional的写法是利用延迟求值，这里整理下相关的概念。<br>
+        <p>在做<a href="http://aperiodic.net/phil/scala/s-99/" target="_blank" rel="noopener">scala99</a>的P91 Knight’s tour时，需要递归搜索整个解题空间找到所有可能的解，如果只想要得到部分解，就要先算出全量解再作筛选，这样就要作多余的运算了。在其他编程语言一般利用控制流来实现，即利用if-else条件判断和return返回提前终止搜索过程，而在scala里更functional的写法是利用延迟求值，这里整理下相关的概念。<br>
         
           <p class="article-more-link">
             <a href="/2017/02/15/lazy_evalutaion_in_scala/#more">More...</a>
@@ -203,46 +232,10 @@ ga('send', 'pageview');
 
 
   
-    <article id="post-Hello_CYL" class="article article-type-post" itemscope itemprop="blogPost">
   
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/31/Hello_CYL/">Hello CYL</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      <a href="/2017/01/31/Hello_CYL/" class="article-date">
-  <time datetime="2017-01-31T15:59:59.000Z" itemprop="datePublished">2017-01-31</time>
-</a>
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>封闭了大半年，喘过气来从新激活下这个hexo博客，感觉技术上的学习还是需要有一个地方记录下，尤其是工作中用不到的、自己学习的东西，也算是一种督促。</p>
-<p>新的一年，在这里给自己订个目标，希望能在这个博客记录下这几个方面的学习和总结吧：<br>
-        
-          <p class="article-more-link">
-            <a href="/2017/01/31/Hello_CYL/#more">More...</a>
-          </p>
-        
-      
-
-      
-        
-    </div>
-  </div>
-  
-</article>
-
-
-  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    </nav>
   
 </section>
         <aside id="sidebar">
@@ -266,7 +259,7 @@ ga('send', 'pageview');
       <footer id="footer">
   
 	<div id="footer-info" class="inner">
-	  &copy; 2017 youlingman 
+	  &copy; 2018 youlingman 
 	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	  - Theme <a href="https://github.com/Alex-fun/hexo-theme-jane/" target="_blank">Jane</a>
 	</div>

@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="cyl&#39;s blog">
 <meta property="og:description" content="封闭了大半年，喘过气来从新激活下这个hexo博客，感觉技术上的学习还是需要有一个地方记录下，尤其是工作中用不到的、自己学习的东西，也算是一种督促。 新的一年，在这里给自己订个目标，希望能在这个博客记录下这几个方面的学习和总结吧：">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-09T15:41:37.560Z">
+<meta property="og:updated_time" content="2018-03-26T14:16:09.863Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hello CYL">
 <meta name="twitter:description" content="封闭了大半年，喘过气来从新激活下这个hexo博客，感觉技术上的学习还是需要有一个地方记录下，尤其是工作中用不到的、自己学习的东西，也算是一种督促。 新的一年，在这里给自己订个目标，希望能在这个博客记录下这几个方面的学习和总结吧：">
@@ -73,11 +73,11 @@ ga('send', 'pageview');
 <h5 id="响应式编程"><a href="#响应式编程" class="headerlink" title="响应式编程"></a>响应式编程</h5><p>对这个概念挺感兴趣的，大概了解了下感觉和FP很类似，也许会在工作中尝试一下Rx。</p>
 <h5 id="机器学习"><a href="#机器学习" class="headerlink" title="机器学习"></a>机器学习</h5><p>有时间的话在kaggle上耍耍。</p>
 <hr>
-<p>最后附上搭建这个hexo博客的小记录吧，这个<a href="https://github.com/youlingman/youlingman.github.com" target="_blank" rel="external">博客</a>是放在Github User Pages上的hexo博客，使用了<a href="https://github.com/Alex-fun" target="_blank" rel="external">Alex-fun</a>的主题<a href="http://hejx.me/2016/02/07/hexo-theme-jane/" target="_blank" rel="external">jane</a>。</p>
-<p>搭建过程参考<a href="http://crazymilk.github.io/2015/12/28/GitHub-Pages-Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2" target="_blank" rel="external">这里</a>，使用同一个repo的两条分支，分别存放hexo元配置文件和生成的博客静态文件。</p>
-<p>然后利用了Travis CI实现自动更新和发布，参考了<a href="https://xin053.github.io/2016/06/05/Travis%20CI%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2Hexo%E5%8D%9A%E5%AE%A2%E5%88%B0Github/" target="_blank" rel="external">这里</a>。</p>
+<p>最后附上搭建这个hexo博客的小记录吧，这个<a href="https://github.com/youlingman/youlingman.github.com" target="_blank" rel="noopener">博客</a>是放在Github User Pages上的hexo博客，使用了<a href="https://github.com/Alex-fun" target="_blank" rel="noopener">Alex-fun</a>的主题<a href="http://hejx.me/2016/02/07/hexo-theme-jane/" target="_blank" rel="noopener">jane</a>。</p>
+<p>搭建过程参考<a href="http://crazymilk.github.io/2015/12/28/GitHub-Pages-Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2" target="_blank" rel="noopener">这里</a>，使用同一个repo的两条分支，分别存放hexo元配置文件和生成的博客静态文件。</p>
+<p>然后利用了Travis CI实现自动更新和发布，参考了<a href="https://xin053.github.io/2016/06/05/Travis%20CI%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2Hexo%E5%8D%9A%E5%AE%A2%E5%88%B0Github/" target="_blank" rel="noopener">这里</a>。</p>
 <p>注意Github的personal access token只需要勾上public repo权限就可以完成推送，同时.travis.yml里的hexo deploy记得加上–silent选项，以避免在Travis CI的build log里暴露personal access token。</p>
-<p>edit：在travis执行hexo deploy之前，需要提前将hexo部署分支（即存放静态HTML文件的分支）clone到.deploy_git目录，否则<a href="https://github.com/hexojs/hexo-deployer-git" target="_blank" rel="external">hexo-deployer-git插件</a>会初始化一个空的.deploy_git目录然后force push，导致部署分支的历史提交记录被重置。</p>
+<p>edit：在travis执行hexo deploy之前，需要提前将hexo部署分支（即存放静态HTML文件的分支）clone到.deploy_git目录，否则<a href="https://github.com/hexojs/hexo-deployer-git" target="_blank" rel="noopener">hexo-deployer-git插件</a>会初始化一个空的.deploy_git目录然后force push，导致部署分支的历史提交记录被重置。</p>
 
       
 
@@ -145,7 +145,7 @@ ga('send', 'pageview');
       <footer id="footer">
   
 	<div id="footer-info" class="inner">
-	  &copy; 2017 youlingman 
+	  &copy; 2018 youlingman 
 	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	  - Theme <a href="https://github.com/Alex-fun/hexo-theme-jane/" target="_blank">Jane</a>
 	</div>

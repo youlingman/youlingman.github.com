@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="cyl&#39;s blog">
 <meta property="og:description" content="webview中使用post加载在项目中遇到一个需求，需要在android的webview中对特定请求（其实就是第一次打开webview的时候）进行可自定义header的post请求，而原生webview提供的post API是这样的： public void postUrl(String url, byte[] postData); 不可以自定义header，反观get API可以自定义head">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-09T15:41:37.564Z">
+<meta property="og:updated_time" content="2018-03-26T14:16:09.863Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HttpURLConnection和webview的协同使用">
 <meta name="twitter:description" content="webview中使用post加载在项目中遇到一个需求，需要在android的webview中对特定请求（其实就是第一次打开webview的时候）进行可自定义header的post请求，而原生webview提供的post API是这样的： public void postUrl(String url, byte[] postData); 不可以自定义header，反观get API可以自定义head">
@@ -83,9 +83,9 @@ ga('send', 'pageview');
 <p>webview可以认为是基于webkit的浏览器客户端，里面封装好了对请求的相关处理，单独实现请求还需要注意相关的特殊处理，下面是踩过的两个坑。</p>
 <h3 id="HttpURLConnection和webview协同-重定向处理"><a href="#HttpURLConnection和webview协同-重定向处理" class="headerlink" title="HttpURLConnection和webview协同-重定向处理"></a>HttpURLConnection和webview协同-重定向处理</h3><p>HttpURLConnection有一个方法setInstanceFollowRedirects可以设置是否自动follow重定向。</p>
 <pre><code>public void setInstanceFollowRedirects(boolean followRedirects)
-</code></pre><p>但是如果原URL是http而目标URL是https的话这个方法是不能自动跳转的，搜了下<a href="http://bugs.java.com/bugdatabase/view_bug.do?bug_id=4620571" target="_blank" rel="external">这里</a>提到java由于安全原因不允许不同协议间的自动重定向跳转，需要应用层面去实现各自的重定向逻辑。</p>
+</code></pre><p>但是如果原URL是http而目标URL是https的话这个方法是不能自动跳转的，搜了下<a href="http://bugs.java.com/bugdatabase/view_bug.do?bug_id=4620571" target="_blank" rel="noopener">这里</a>提到java由于安全原因不允许不同协议间的自动重定向跳转，需要应用层面去实现各自的重定向逻辑。</p>
 <p>实现逻辑很简单，就是判一下返回码，如果为重定向的返回码，则把header里Location域的url取出来load进webview里。</p>
-<h3 id="HttpURLConnection和webview协同-cookie处理"><a href="#HttpURLConnection和webview协同-cookie处理" class="headerlink" title="HttpURLConnection和webview协同-cookie处理"></a>HttpURLConnection和webview协同-cookie处理</h3><p>根据官方文档，android应用的webview实例的cookie都是由<a href="https://developer.android.com/reference/android/webkit/CookieManager.html" target="_blank" rel="external">CookieManager</a>来管理的，因此HttpURLConnection请求返回的cookie需要同步到CookieManager里，然后这个CookieManager里面坑不少，主要有以下几个：</p>
+<h3 id="HttpURLConnection和webview协同-cookie处理"><a href="#HttpURLConnection和webview协同-cookie处理" class="headerlink" title="HttpURLConnection和webview协同-cookie处理"></a>HttpURLConnection和webview协同-cookie处理</h3><p>根据官方文档，android应用的webview实例的cookie都是由<a href="https://developer.android.com/reference/android/webkit/CookieManager.html" target="_blank" rel="noopener">CookieManager</a>来管理的，因此HttpURLConnection请求返回的cookie需要同步到CookieManager里，然后这个CookieManager里面坑不少，主要有以下几个：</p>
 <ul>
 <li>如果http response里返了多条cookie，需要调用多次setCookie方法来完成设置；</li>
 <li>setCookie方法设置的cookie要带上path信息，否则webview里的ajax请求不能同步到对应cookie（这个setCookie方法为啥不提供一个接受HttpCookie类型参数的签名呢，只接受String类型的参数用起来太不方便了）；</li>
@@ -163,7 +163,7 @@ ga('send', 'pageview');
       <footer id="footer">
   
 	<div id="footer-info" class="inner">
-	  &copy; 2017 youlingman 
+	  &copy; 2018 youlingman 
 	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	  - Theme <a href="https://github.com/Alex-fun/hexo-theme-jane/" target="_blank">Jane</a>
 	</div>

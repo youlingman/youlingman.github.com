@@ -1,3 +1,9 @@
+---
+title: android的handler机制
+date: 2018-03-26 22:22:22
+tags: [android]
+---
+
 在Android应用里，谷歌只允许在主线程即UI线程更新UI，在这个主线程里做一些耗时的操作会导致[ANR](https://developer.android.com/topic/performance/vitals/anr.html)，于是一些耗时间的操作，如网络请求，就需要搬到额外线程去执行，而耗时操作之后往往又需要返回主/UI线程去更新UI。针对这个场景Android提供了一些组件给开发者使用，包括Handler、HandlerThread和AsyncTask，后两者其实都是基于Handler的实现。
 
 <!--more-->

@@ -12,7 +12,7 @@ timezone: Asia/Shanghai
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://youlingman.info
+url: http://icyl.rocks
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -84,7 +84,9 @@ sitemap:
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type: git
+- type: git
   repo: git@github.com:youlingman/youlingman.github.com.git
   branch: master
-
+- type: git
+  repo: git@git.coding.net:youlingman/youlingman.git
+  branch: coding-pages

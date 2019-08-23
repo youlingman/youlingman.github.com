@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
   <title>scala中的Stream | cyl&#39;s blog</title>
@@ -9,11 +9,11 @@
 <meta name="keywords" content="scala,functional">
 <meta property="og:type" content="article">
 <meta property="og:title" content="scala中的Stream">
-<meta property="og:url" content="http://youlingman.info/2017/07/01/stream_in_scala/index.html">
+<meta property="og:url" content="http://icyl.rocks/2017/07/01/stream_in_scala/index.html">
 <meta property="og:site_name" content="cyl&#39;s blog">
 <meta property="og:description" content="在之前scala中的延迟求值中提到，在使用递归遍历的方法解骑士巡游问题时，可以利用延迟求值的方法来获取需要的部分解（而不用依赖if-else等条件控制流），scala提供了一个lazy list来支持按需计算，称为Stream，这里整理一下相关用法和原理。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-26T14:24:11.253Z">
+<meta property="og:updated_time" content="2019-08-23T15:49:35.848Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="scala中的Stream">
 <meta name="twitter:description" content="在之前scala中的延迟求值中提到，在使用递归遍历的方法解骑士巡游问题时，可以利用延迟求值的方法来获取需要的部分解（而不用依赖if-else等条件控制流），scala提供了一个lazy list来支持按需计算，称为Stream，这里整理一下相关用法和原理。">
@@ -40,7 +40,7 @@ ga('send', 'pageview');
 <!-- End Google Analytics -->
 
 
-</head>
+</head></html>
 <body>
   <div id="container">
     <div id="wrap">
@@ -67,7 +67,7 @@ ga('send', 'pageview');
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在之前<a href="http://youlingman.info/2017/02/15/lazy_evalutaion_in_scala/">scala中的延迟求值</a>中提到，在使用递归遍历的方法解<a href="https://en.wikipedia.org/wiki/Knight%27s_tour" target="_blank" rel="noopener">骑士巡游问题</a>时，可以利用延迟求值的方法来获取需要的部分解（而不用依赖if-else等条件控制流），scala提供了一个lazy list来支持按需计算，称为Stream，这里整理一下相关用法和原理。<br><a id="more"></a></p>
+        <p>在之前<a href="http://youlingman.info/2017/02/15/lazy_evalutaion_in_scala/" target="_blank" rel="noopener">scala中的延迟求值</a>中提到，在使用递归遍历的方法解<a href="https://en.wikipedia.org/wiki/Knight%27s_tour" target="_blank" rel="noopener">骑士巡游问题</a>时，可以利用延迟求值的方法来获取需要的部分解（而不用依赖if-else等条件控制流），scala提供了一个lazy list来支持按需计算，称为Stream，这里整理一下相关用法和原理。<br><a id="more"></a></p>
 <h3 id="问题简化"><a href="#问题简化" class="headerlink" title="问题简化"></a>问题简化</h3><p>对骑士巡游问题作一下抽象，可以将问题描述为“对一个列表（解题空间，骑士所有可能的走法）进行筛选（是否填满棋盘/出发点和结束点是否一致）”，这里将问题简化成同构的问题“对一个列表（整数列表）进行筛选（是否素数）”。</p>
 <p>首先先实现一个判断素数函数，并随机生成一个长度为50的整数列表。</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">scala&gt; <span class="function"><span class="keyword">def</span> <span class="title">isPrime</span></span>(n : <span class="type">Int</span>): <span class="type">Boolean</span> = n == <span class="number">2</span> || <span class="type">List</span>.range(<span class="number">2</span>, n / <span class="number">2</span> + <span class="number">1</span>).forall(i =&gt; n % i != <span class="number">0</span>)</span><br><span class="line">isPrime: (n: <span class="type">Int</span>)<span class="type">Boolean</span></span><br><span class="line"></span><br><span class="line">scala&gt; <span class="keyword">val</span> list = <span class="type">Seq</span>.fill(<span class="number">50</span>)(<span class="type">Random</span>.nextInt(<span class="number">1000</span>))</span><br><span class="line">list: <span class="type">Seq</span>[<span class="type">Int</span>] = <span class="type">List</span>(<span class="number">403</span>, <span class="number">615</span>, <span class="number">930</span>, <span class="number">197</span>, <span class="number">599</span>, <span class="number">841</span>, <span class="number">439</span>, <span class="number">153</span>, <span class="number">655</span>, <span class="number">809</span>, <span class="number">861</span>, <span class="number">942</span>, <span class="number">858</span>, <span class="number">381</span>, <span class="number">299</span>, <span class="number">550</span>, <span class="number">32</span>, <span class="number">343</span>, <span class="number">542</span>, <span class="number">146</span>, <span class="number">872</span>, <span class="number">522</span>, <span class="number">23</span>, <span class="number">569</span>, <span class="number">959</span>, <span class="number">165</span>, <span class="number">631</span>, <span class="number">438</span>, <span class="number">444</span>, <span class="number">589</span>, <span class="number">634</span>, <span class="number">997</span>, <span class="number">145</span>, <span class="number">675</span>, <span class="number">873</span>, <span class="number">155</span>, <span class="number">51</span>, <span class="number">326</span>, <span class="number">610</span>, <span class="number">623</span>, <span class="number">938</span>, <span class="number">343</span>, <span class="number">442</span>, <span class="number">728</span>, <span class="number">364</span>, <span class="number">0</span>, <span class="number">866</span>, <span class="number">188</span>, <span class="number">892</span>, <span class="number">495</span>)</span><br></pre></td></tr></table></figure>
@@ -183,7 +183,7 @@ ga('send', 'pageview');
       <footer id="footer">
   
 	<div id="footer-info" class="inner">
-	  &copy; 2018 youlingman 
+	  &copy; 2019 youlingman 
 	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	  - Theme <a href="https://github.com/Alex-fun/hexo-theme-jane/" target="_blank">Jane</a>
 	</div>
@@ -204,7 +204,7 @@ ga('send', 'pageview');
 <script>
   var disqus_shortname = 'youlingmaninfo';
   
-  var disqus_url = 'http://youlingman.info/2017/07/01/stream_in_scala/';
+  var disqus_url = 'http://icyl.rocks/2017/07/01/stream_in_scala/';
   
   (function(){
     var dsq = document.createElement('script');

@@ -5,9 +5,9 @@
   
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://youlingman.info/"/>
-  <updated>2018-03-26T14:24:11.253Z</updated>
-  <id>http://youlingman.info/</id>
+  <link href="http://icyl.rocks/"/>
+  <updated>2019-08-23T15:49:35.848Z</updated>
+  <id>http://icyl.rocks/</id>
   
   <author>
     <name>youlingman</name>
@@ -18,10 +18,10 @@
   
   <entry>
     <title>android的handler机制</title>
-    <link href="http://youlingman.info/2018/03/26/android_handler/"/>
-    <id>http://youlingman.info/2018/03/26/android_handler/</id>
+    <link href="http://icyl.rocks/2018/03/26/android_handler/"/>
+    <id>http://icyl.rocks/2018/03/26/android_handler/</id>
     <published>2018-03-26T14:22:22.000Z</published>
-    <updated>2018-03-26T14:24:11.253Z</updated>
+    <updated>2019-08-23T15:49:35.848Z</updated>
     
     <summary type="html">
     
@@ -30,16 +30,16 @@
     </summary>
     
     
-      <category term="android" scheme="http://youlingman.info/tags/android/"/>
+      <category term="android" scheme="http://icyl.rocks/tags/android/"/>
     
   </entry>
   
   <entry>
     <title>Trampoline和尾递归</title>
-    <link href="http://youlingman.info/2017/11/08/Trampoline/"/>
-    <id>http://youlingman.info/2017/11/08/Trampoline/</id>
+    <link href="http://icyl.rocks/2017/11/08/Trampoline/"/>
+    <id>http://icyl.rocks/2017/11/08/Trampoline/</id>
     <published>2017-11-08T12:00:35.000Z</published>
-    <updated>2018-03-26T14:24:11.253Z</updated>
+    <updated>2019-08-23T15:49:35.848Z</updated>
     
     <summary type="html">
     
@@ -48,38 +48,38 @@
     </summary>
     
     
-      <category term="javascript" scheme="http://youlingman.info/tags/javascript/"/>
+      <category term="javascript" scheme="http://icyl.rocks/tags/javascript/"/>
     
-      <category term="functional" scheme="http://youlingman.info/tags/functional/"/>
+      <category term="functional" scheme="http://icyl.rocks/tags/functional/"/>
     
   </entry>
   
   <entry>
     <title>scala中的Stream</title>
-    <link href="http://youlingman.info/2017/07/01/stream_in_scala/"/>
-    <id>http://youlingman.info/2017/07/01/stream_in_scala/</id>
+    <link href="http://icyl.rocks/2017/07/01/stream_in_scala/"/>
+    <id>http://icyl.rocks/2017/07/01/stream_in_scala/</id>
     <published>2017-07-01T11:57:30.000Z</published>
-    <updated>2018-03-26T14:24:11.253Z</updated>
+    <updated>2019-08-23T15:49:35.848Z</updated>
     
     <summary type="html">
     
-      &lt;p&gt;在之前&lt;a href=&quot;http://youlingman.info/2017/02/15/lazy_evalutaion_in_scala/&quot;&gt;scala中的延迟求值&lt;/a&gt;中提到，在使用递归遍历的方法解&lt;a href=&quot;https://en.wikipedia.org/wiki/Knight%27s_tour&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;骑士巡游问题&lt;/a&gt;时，可以利用延迟求值的方法来获取需要的部分解（而不用依赖if-else等条件控制流），scala提供了一个lazy list来支持按需计算，称为Stream，这里整理一下相关用法和原理。&lt;br&gt;
+      &lt;p&gt;在之前&lt;a href=&quot;http://youlingman.info/2017/02/15/lazy_evalutaion_in_scala/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;scala中的延迟求值&lt;/a&gt;中提到，在使用递归遍历的方法解&lt;a href=&quot;https://en.wikipedia.org/wiki/Knight%27s_tour&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;骑士巡游问题&lt;/a&gt;时，可以利用延迟求值的方法来获取需要的部分解（而不用依赖if-else等条件控制流），scala提供了一个lazy list来支持按需计算，称为Stream，这里整理一下相关用法和原理。&lt;br&gt;
     
     </summary>
     
     
-      <category term="scala" scheme="http://youlingman.info/tags/scala/"/>
+      <category term="scala" scheme="http://icyl.rocks/tags/scala/"/>
     
-      <category term="functional" scheme="http://youlingman.info/tags/functional/"/>
+      <category term="functional" scheme="http://icyl.rocks/tags/functional/"/>
     
   </entry>
   
   <entry>
     <title>HttpURLConnection和webview的协同使用</title>
-    <link href="http://youlingman.info/2017/03/27/HttpURLConnection-and-webview/"/>
-    <id>http://youlingman.info/2017/03/27/HttpURLConnection-and-webview/</id>
+    <link href="http://icyl.rocks/2017/03/27/HttpURLConnection-and-webview/"/>
+    <id>http://icyl.rocks/2017/03/27/HttpURLConnection-and-webview/</id>
     <published>2017-03-27T06:34:40.000Z</published>
-    <updated>2018-03-26T14:24:11.253Z</updated>
+    <updated>2019-08-23T15:49:35.848Z</updated>
     
     <summary type="html">
     
@@ -93,16 +93,16 @@
     </summary>
     
     
-      <category term="android" scheme="http://youlingman.info/tags/android/"/>
+      <category term="android" scheme="http://icyl.rocks/tags/android/"/>
     
   </entry>
   
   <entry>
     <title>scala中的延迟求值</title>
-    <link href="http://youlingman.info/2017/02/15/lazy_evalutaion_in_scala/"/>
-    <id>http://youlingman.info/2017/02/15/lazy_evalutaion_in_scala/</id>
+    <link href="http://icyl.rocks/2017/02/15/lazy_evalutaion_in_scala/"/>
+    <id>http://icyl.rocks/2017/02/15/lazy_evalutaion_in_scala/</id>
     <published>2017-02-15T11:57:30.000Z</published>
-    <updated>2018-03-26T14:24:11.253Z</updated>
+    <updated>2019-08-23T15:49:35.848Z</updated>
     
     <summary type="html">
     
@@ -111,18 +111,18 @@
     </summary>
     
     
-      <category term="scala" scheme="http://youlingman.info/tags/scala/"/>
+      <category term="scala" scheme="http://icyl.rocks/tags/scala/"/>
     
-      <category term="functional" scheme="http://youlingman.info/tags/functional/"/>
+      <category term="functional" scheme="http://icyl.rocks/tags/functional/"/>
     
   </entry>
   
   <entry>
     <title>Hello CYL</title>
-    <link href="http://youlingman.info/2017/01/31/Hello_CYL/"/>
-    <id>http://youlingman.info/2017/01/31/Hello_CYL/</id>
+    <link href="http://icyl.rocks/2017/01/31/Hello_CYL/"/>
+    <id>http://icyl.rocks/2017/01/31/Hello_CYL/</id>
     <published>2017-01-31T15:59:59.000Z</published>
-    <updated>2018-03-26T14:24:11.253Z</updated>
+    <updated>2019-08-23T15:49:35.848Z</updated>
     
     <summary type="html">
     
@@ -132,7 +132,7 @@
     </summary>
     
     
-      <category term="hexo" scheme="http://youlingman.info/tags/hexo/"/>
+      <category term="hexo" scheme="http://icyl.rocks/tags/hexo/"/>
     
   </entry>
   

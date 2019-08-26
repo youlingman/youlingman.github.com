@@ -3,7 +3,7 @@ title: 无穷序列：Stream与generator
 date: 2017-08-01 19:57:30
 tags: [scala,python]
 ---
-[上一篇介绍stream](http://youlingman.info/2017/07/01/stream_in_scala/)里提到，scala中的Stream可以利用其延迟计算的特性表达和处理无穷序列，而python中则提供了一种称为generator生成器的机制。下面讨论下stream和generator如何表达无穷序列。
+[上一篇介绍stream](/2017/07/01/stream_in_scala/)里提到，scala中的Stream可以利用其延迟计算的特性表达和处理无穷序列，而python中则提供了一种称为generator生成器的机制。下面讨论下stream和generator如何表达无穷序列。
 
 ### 无穷序列的生成/处理
 

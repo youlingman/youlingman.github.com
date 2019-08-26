@@ -3,7 +3,7 @@ title: scala中的Stream
 date: 2017-07-01 19:57:30
 tags: [scala,functional]
 ---
-在之前[scala中的延迟求值](http://youlingman.info/2017/02/15/lazy_evalutaion_in_scala/)中提到，在使用递归遍历的方法解[骑士巡游问题](https://en.wikipedia.org/wiki/Knight%27s_tour)时，可以利用延迟求值的方法来获取需要的部分解（而不用依赖if-else等条件控制流），scala提供了一个lazy list来支持按需计算，称为Stream，这里整理一下相关用法和原理。
+在之前[scala中的延迟求值](/2017/02/15/lazy_evalutaion_in_scala/)中提到，在使用递归遍历的方法解[骑士巡游问题](https://en.wikipedia.org/wiki/Knight%27s_tour)时，可以利用延迟求值的方法来获取需要的部分解（而不用依赖if-else等条件控制流），scala提供了一个lazy list来支持按需计算，称为Stream，这里整理一下相关用法和原理。
 <!--more-->
 
 ### 问题简化

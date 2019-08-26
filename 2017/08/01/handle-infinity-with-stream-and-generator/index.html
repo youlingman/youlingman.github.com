@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>无穷序列：Stream与generator | cyl&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="上一篇介绍stream里提到，scala中的Stream可以利用其延迟计算的特性表达和处理无穷序列，而python中则提供了一种称为generator生成器的机制。下面讨论下stream和generator如何表达无穷序列。 无穷序列的生成/处理如何生成一个无穷序列，可以有以下几种方式：  重复某（几）个元素生成序列； 通过随机生成每个元素生成序列； 通过特定的递推算法生成序列；  而重复和随机元">
+<meta name="keywords" content="scala,python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="无穷序列：Stream与generator">
+<meta property="og:url" content="http://icyl.rocks/2017/08/01/handle-infinity-with-stream-and-generator/index.html">
+<meta property="og:site_name" content="cyl&#39;s blog">
+<meta property="og:description" content="上一篇介绍stream里提到，scala中的Stream可以利用其延迟计算的特性表达和处理无穷序列，而python中则提供了一种称为generator生成器的机制。下面讨论下stream和generator如何表达无穷序列。 无穷序列的生成/处理如何生成一个无穷序列，可以有以下几种方式：  重复某（几）个元素生成序列； 通过随机生成每个元素生成序列； 通过特定的递推算法生成序列；  而重复和随机元">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-08-26T13:21:35.679Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="无穷序列：Stream与generator">
+<meta name="twitter:description" content="上一篇介绍stream里提到，scala中的Stream可以利用其延迟计算的特性表达和处理无穷序列，而python中则提供了一种称为generator生成器的机制。下面讨论下stream和generator如何表达无穷序列。 无穷序列的生成/处理如何生成一个无穷序列，可以有以下几种方式：  重复某（几）个元素生成序列； 通过随机生成每个元素生成序列； 通过特定的递推算法生成序列；  而重复和随机元">
+  
+    <link rel="alternative" href="/atom.xml" title="cyl&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-91857907-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head></html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <section id="main"><article id="post-handle-infinity-with-stream-and-generator" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      无穷序列：Stream与generator
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/08/01/handle-infinity-with-stream-and-generator/" class="article-date">
+  <time datetime="2017-08-01T11:57:30.000Z" itemprop="datePublished">2017-08-01</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="http://youlingman.info/2017/07/01/stream_in_scala/" target="_blank" rel="noopener">上一篇介绍stream</a>里提到，scala中的Stream可以利用其延迟计算的特性表达和处理无穷序列，而python中则提供了一种称为generator生成器的机制。下面讨论下stream和generator如何表达无穷序列。</p>
+<h3 id="无穷序列的生成-处理"><a href="#无穷序列的生成-处理" class="headerlink" title="无穷序列的生成/处理"></a>无穷序列的生成/处理</h3><p>如何生成一个无穷序列，可以有以下几种方式：</p>
+<ol>
+<li>重复某（几）个元素生成序列；</li>
+<li>通过随机生成每个元素生成序列；</li>
+<li>通过特定的递推算法生成序列；</li>
+</ol>
+<p>而重复和随机元素都可以归为一种特定的递归算法，下面就以递推生成序列为例。</p>
+<p>当然，任何程序都无法对无穷进行整体操作，一般对无穷序列的处理，主要是对无穷序列进行相应的筛选/截取，以得到想要的有穷数据/信息。比如 <a href="https://en.wikipedia.org/wiki/Fibonacci_number" target="_blank" rel="noopener">Fibonacci number</a> 就是一个无穷大的序列，对这个序列整体进行处理是不可用的，比如统计序列长度、计算均值等等，我们一般会进行的操作是获取前十个数、获取在[100,200]区间内的fibonacci数等等。</p>
+<p>生成一个fibonacci序列可以通过一个<a href="https://en.wikipedia.org/wiki/Corecursion" target="_blank" rel="noopener">递推</a>（这个wiki挺有意思）算法来完成，下面是获取第n个fibonacci数的递推算法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fib</span><span class="params">(n)</span>:</span></span><br><span class="line">	<span class="keyword">if</span> n==<span class="number">1</span> <span class="keyword">or</span> n==<span class="number">2</span>:</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">	<span class="keyword">return</span> fib(n<span class="number">-1</span>)+fib(n<span class="number">-2</span>)</span><br></pre></td></tr></table></figure>
+<p>而获取前五个fibonacci数最直接的算法，就是直接通过递推算法逐个获取对应的fibonacci数（废话）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>fibs = []</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">6</span>):</span><br><span class="line"><span class="meta">... </span>  fibs.append(fib(i))</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>fibs</span><br><span class="line">[<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>]</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h3 id="Stream：函数式编程、延迟计算、不可变容器"><a href="#Stream：函数式编程、延迟计算、不可变容器" class="headerlink" title="Stream：函数式编程、延迟计算、不可变容器"></a>Stream：函数式编程、延迟计算、不可变容器</h3><p>在scala中，通过Stream可以获得对无穷序列的表达能力，这里的表达能力是指通过将序列的递推生成算法映射到Stream对象的构造逻辑，然后就可以指着这个Stream对象说它就是一个对应的无穷序列。下面从<a href="https://www.scala-lang.org/api/current/scala/collection/immutable/Stream.html" target="_blank" rel="noopener">Stream docs</a>抄了fibonacci序列的对应Stream（#::改成cons以便理解）。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scala&gt; <span class="keyword">val</span> fibs:<span class="type">Stream</span>[<span class="type">Int</span>] = <span class="type">Stream</span>.cons(<span class="number">0</span>, <span class="type">Stream</span>.cons(<span class="number">1</span>, fibs.zip(fibs.tail).map &#123; n =&gt; n._1 + n._2 &#125;))</span><br><span class="line">fibs2: <span class="type">Stream</span>[<span class="type">Int</span>] = <span class="type">Stream</span>(<span class="number">0</span>, ?)</span><br></pre></td></tr></table></figure>
+<p>不重复上一篇的源码剖析思路去分析Stream原理了，这里关注的点是，基于延迟计算和高阶函数，scala的Stream可以从较高的抽象层面去表达和处理无穷序列（直接将递推算法映射到Stream的构造逻辑，生成序列对应的容器）。</p>
+<p>而在命令式编程语言里，一般的思路则是通过可变量和状态流（if-else-return）来实现对应递推进而对无穷序列进行生成和处理。</p>
+<h3 id="generator：迭代器、延迟计算？协程？"><a href="#generator：迭代器、延迟计算？协程？" class="headerlink" title="generator：迭代器、延迟计算？协程？"></a>generator：迭代器、延迟计算？协程？</h3><p>在<a href="https://www.scala-lang.org/api/current/scala/collection/immutable/Stream.html" target="_blank" rel="noopener">scala Stream docs</a>里提到，当Stream被声明为val变量（而不是函数）时，其会缓存head（以及其它被访问过的元素），某些操作可能会在返回结果前产生大量的中间过程数据，从而占用大量内存。如果这些缓存是不必要的，docs推荐尽量使用迭代器。继续从docs里抄Fibonacci序列的scala迭代器版本。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> it = <span class="keyword">new</span> <span class="type">Iterator</span>[<span class="type">Int</span>] &#123;</span><br><span class="line">  <span class="keyword">var</span> a = <span class="number">0</span></span><br><span class="line">  <span class="keyword">var</span> b = <span class="number">1</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">hasNext</span> </span>= <span class="literal">true</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">next</span></span>(): <span class="type">Int</span> = &#123; <span class="keyword">val</span> c = b; b = a + b; a = c; a &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">scala&gt; it.next</span><br><span class="line">res0: <span class="type">Int</span> = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">scala&gt; it.next</span><br><span class="line">res1: <span class="type">Int</span> = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">scala&gt; it.next</span><br><span class="line">res2: <span class="type">Int</span> = <span class="number">2</span></span><br><span class="line"></span><br><span class="line">scala&gt; it.next</span><br><span class="line">res3: <span class="type">Int</span> = <span class="number">3</span></span><br></pre></td></tr></table></figure>
+<p>这里就引出了生成无穷序列的另外一个思路：迭代器。不同于函数式编程的思路，迭代器更关注怎么做（how），而不是做什么（what），这里存在所谓的<a href="https://en.wikipedia.org/wiki/Declarative_programming" target="_blank" rel="noopener">声明式编程</a>和<a href="https://en.wikipedia.org/wiki/Imperative_programming" target="_blank" rel="noopener">命令式编程</a>的<a href="https://en.wikipedia.org/wiki/Comparison_of_multi-paradigm_programming_languages" target="_blank" rel="noopener">差异</a>。总而言之，迭代器从过程的角度，引入可变量来保存每步递推的上下文，利用控制流来重复递推逻辑。</p>
+<p>在Python里，实现了迭代器协议的对象都可以被当作迭代器（<a href="https://en.wikipedia.org/wiki/Duck_typing" target="_blank" rel="noopener">鸭子类型</a>），迭代器协议包括两个方法（Python3）：</p>
+<ul>
+<li><strong>iter</strong>()，返回迭代器对象自身；</li>
+<li><strong>next</strong>()，返回迭代器的下一个元素，如果不存在下一个元素则抛出一个StopIteration异常；</li>
+</ul>
+<p>在scala中自定义一个迭代器只要实例化一个支持Iterator trait的匿名类就好，而不支持匿名类的python里则没有这么方便了，于是python提供了一个<strong>快速自定义迭代器的语法糖</strong>，generator生成器。下面尝试利用生成器得到fibonacci序列的迭代器。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">fib</span><span class="params">()</span>:</span></span><br><span class="line"><span class="meta">... </span>    a, b = <span class="number">0</span>, <span class="number">1</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">while</span> Tru:</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">yield</span> a</span><br><span class="line"><span class="meta">... </span>        a, b = b, a + b</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>fibs = fib()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>fibs</span><br><span class="line">&lt;generator object fib at <span class="number">0x0000000002BBBA68</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(fibs)</span><br><span class="line"><span class="number">0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(fibs)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(fibs)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(fibs)</span><br><span class="line"><span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>在一个函数内用到yield关键字，函数会返回一个生成器对象，这个生成器对象实现了迭代器协议，可以认为是一个迭代器。下面是Python2打出来的生成器对象方法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>help(fibs)</span><br><span class="line">Help on generator object:</span><br><span class="line"></span><br><span class="line">fib = <span class="class"><span class="keyword">class</span> <span class="title">generator</span><span class="params">(object)</span></span></span><br><span class="line"><span class="class"> |  <span class="title">Methods</span> <span class="title">defined</span> <span class="title">here</span>:</span></span><br><span class="line"> |</span><br><span class="line"> |  __getattribute__(...)</span><br><span class="line"> |      x.__getattribute__('name') &lt;==&gt; x.name</span><br><span class="line"> |</span><br><span class="line"> |  __iter__(...)</span><br><span class="line"> |      x.__iter__() &lt;==&gt; iter(x)</span><br><span class="line"> |</span><br><span class="line"> |  __repr__(...)</span><br><span class="line"> |      x.__repr__() &lt;==&gt; repr(x)</span><br><span class="line"> |</span><br><span class="line"> |  close(...)</span><br><span class="line"> |      close() -&gt; raise GeneratorExit inside generator.</span><br><span class="line"> |</span><br><span class="line"> |  next(...)</span><br><span class="line"> |      x.next() -&gt; the next value, or raise StopIteration</span><br><span class="line"> |</span><br><span class="line"> |  send(...)</span><br><span class="line"> |      send(arg) -&gt; send 'arg' into generator,</span><br><span class="line"> |      <span class="keyword">return</span> next yielded value <span class="keyword">or</span> <span class="keyword">raise</span> StopIteration.</span><br><span class="line"> |</span><br><span class="line"> |  throw(...)</span><br><span class="line"> |      throw(typ[,val[,tb]]) -&gt; raise exception in generator,</span><br><span class="line"> |      <span class="keyword">return</span> next yielded value <span class="keyword">or</span> <span class="keyword">raise</span> StopIteration.</span><br></pre></td></tr></table></figure>
+<p>最后讨论两个问题，生成器是否使用到延迟计算？生成器是否是一种协程？</p>
+<p>第一个问题，生成器本身是一个迭代器，一方面，迭代器和序列/列表并不完全对等，实际还需要额外的逻辑才能从迭代器得到对应的列表数据，而另一方面，如果只针对单次遍历/访问序列元素而言，迭代器的确能起到按需计算的效果（虽然是阅后即焚），这种场景下迭代器可以认为是一种lazy sequence。</p>
+<p>第二个问题，引出协程的概念，对这个概念还是一知半解，后续再学习。</p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/11/08/Trampoline/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Trampoline和尾递归
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/07/01/stream_in_scala/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">scala中的Stream</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <script type="text/javascript">
+      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'youlingmaninfo'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>
+    Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
+  </div>
+</section>
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/youlingman" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2019 youlingman 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/Alex-fun/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a href="https://github.com/youlingman" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'youlingmaninfo';
+  
+  var disqus_url = 'http://icyl.rocks/2017/08/01/handle-infinity-with-stream-and-generator/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

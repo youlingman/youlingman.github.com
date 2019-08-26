@@ -84,11 +84,11 @@ sitemap:
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-#- type: git
-#  repo: git@github.com:youlingman/youlingman.github.com.git
-#  branch: master
-
 - type: git
-  repo: git@e.coding.net:youlingman/hexo.git
+  repo: git@github.com:youlingman/youlingman.github.com.git
   branch: master
+
+#- type: git
+#  repo: git@e.coding.net:youlingman/hexo.git
+#  branch: master
 

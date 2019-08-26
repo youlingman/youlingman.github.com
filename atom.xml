@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://icyl.rocks/"/>
-  <updated>2019-08-26T13:21:35.679Z</updated>
+  <updated>2019-08-26T13:47:54.261Z</updated>
   <id>http://icyl.rocks/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://icyl.rocks/2018/03/26/android_handler/"/>
     <id>http://icyl.rocks/2018/03/26/android_handler/</id>
     <published>2018-03-26T14:22:22.000Z</published>
-    <updated>2019-08-26T13:21:35.679Z</updated>
+    <updated>2019-08-26T13:47:54.261Z</updated>
     
     <summary type="html">
     
@@ -39,7 +39,7 @@
     <link href="http://icyl.rocks/2017/11/08/Trampoline/"/>
     <id>http://icyl.rocks/2017/11/08/Trampoline/</id>
     <published>2017-11-08T12:00:35.000Z</published>
-    <updated>2019-08-26T13:21:35.679Z</updated>
+    <updated>2019-08-26T13:47:54.261Z</updated>
     
     <summary type="html">
     
@@ -59,11 +59,11 @@
     <link href="http://icyl.rocks/2017/08/01/handle-infinity-with-stream-and-generator/"/>
     <id>http://icyl.rocks/2017/08/01/handle-infinity-with-stream-and-generator/</id>
     <published>2017-08-01T11:57:30.000Z</published>
-    <updated>2019-08-26T13:21:35.679Z</updated>
+    <updated>2019-08-26T13:47:54.261Z</updated>
     
     <summary type="html">
     
-      &lt;p&gt;&lt;a href=&quot;http://youlingman.info/2017/07/01/stream_in_scala/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;上一篇介绍stream&lt;/a&gt;里提到，scala中的Stream可以利用其延迟计算的特性表达和处理无穷序列，而python中则提供了一种称为generator生成器的机制。下面讨论下stream和generator如何表达无穷序列。&lt;/p&gt;
+      &lt;p&gt;&lt;a href=&quot;/2017/07/01/stream_in_scala/&quot;&gt;上一篇介绍stream&lt;/a&gt;里提到，scala中的Stream可以利用其延迟计算的特性表达和处理无穷序列，而python中则提供了一种称为generator生成器的机制。下面讨论下stream和generator如何表达无穷序列。&lt;/p&gt;
 &lt;h3 id=&quot;无穷序列的生成-处理&quot;&gt;&lt;a href=&quot;#无穷序列的生成-处理&quot; class=&quot;headerlink&quot; title=&quot;无穷序列的生成/处理&quot;&gt;&lt;/a&gt;无穷序列的生成/处理&lt;/h3&gt;&lt;p&gt;如何生成一个无穷序列，可以有以下几种方式：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;重复某（几）个元素生成序列；&lt;/li&gt;
@@ -91,11 +91,11 @@
     <link href="http://icyl.rocks/2017/07/01/stream_in_scala/"/>
     <id>http://icyl.rocks/2017/07/01/stream_in_scala/</id>
     <published>2017-07-01T11:57:30.000Z</published>
-    <updated>2019-08-26T13:21:35.679Z</updated>
+    <updated>2019-08-26T13:47:54.261Z</updated>
     
     <summary type="html">
     
-      &lt;p&gt;在之前&lt;a href=&quot;http://youlingman.info/2017/02/15/lazy_evalutaion_in_scala/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;scala中的延迟求值&lt;/a&gt;中提到，在使用递归遍历的方法解&lt;a href=&quot;https://en.wikipedia.org/wiki/Knight%27s_tour&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;骑士巡游问题&lt;/a&gt;时，可以利用延迟求值的方法来获取需要的部分解（而不用依赖if-else等条件控制流），scala提供了一个lazy list来支持按需计算，称为Stream，这里整理一下相关用法和原理。&lt;br&gt;
+      &lt;p&gt;在之前&lt;a href=&quot;/2017/02/15/lazy_evalutaion_in_scala/&quot;&gt;scala中的延迟求值&lt;/a&gt;中提到，在使用递归遍历的方法解&lt;a href=&quot;https://en.wikipedia.org/wiki/Knight%27s_tour&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;骑士巡游问题&lt;/a&gt;时，可以利用延迟求值的方法来获取需要的部分解（而不用依赖if-else等条件控制流），scala提供了一个lazy list来支持按需计算，称为Stream，这里整理一下相关用法和原理。&lt;br&gt;
     
     </summary>
     
@@ -111,7 +111,7 @@
     <link href="http://icyl.rocks/2017/03/27/HttpURLConnection-and-webview/"/>
     <id>http://icyl.rocks/2017/03/27/HttpURLConnection-and-webview/</id>
     <published>2017-03-27T06:34:40.000Z</published>
-    <updated>2019-08-26T13:21:35.679Z</updated>
+    <updated>2019-08-26T13:47:54.261Z</updated>
     
     <summary type="html">
     
@@ -134,7 +134,7 @@
     <link href="http://icyl.rocks/2017/02/15/lazy_evalutaion_in_scala/"/>
     <id>http://icyl.rocks/2017/02/15/lazy_evalutaion_in_scala/</id>
     <published>2017-02-15T11:57:30.000Z</published>
-    <updated>2019-08-26T13:21:35.679Z</updated>
+    <updated>2019-08-26T13:47:54.261Z</updated>
     
     <summary type="html">
     
@@ -154,7 +154,7 @@
     <link href="http://icyl.rocks/2017/01/31/Hello_CYL/"/>
     <id>http://icyl.rocks/2017/01/31/Hello_CYL/</id>
     <published>2017-01-31T15:59:59.000Z</published>
-    <updated>2019-08-26T13:21:35.679Z</updated>
+    <updated>2019-08-26T13:47:54.261Z</updated>
     
     <summary type="html">
     

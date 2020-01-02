@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://icyl.rocks/"/>
-  <updated>2019-08-26T13:47:54.261Z</updated>
+  <updated>2020-01-02T17:09:22.509Z</updated>
   <id>http://icyl.rocks/</id>
   
   <author>
@@ -17,11 +17,29 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>2019小结</title>
+    <link href="http://icyl.rocks/2020/01/01/Hello_CYL_2019-2020/"/>
+    <id>http://icyl.rocks/2020/01/01/Hello_CYL_2019-2020/</id>
+    <published>2020-01-01T15:59:59.000Z</published>
+    <updated>2020-01-02T17:09:22.509Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;新的一年，不知不觉已经过了而立之年，最近持续被贩卖蕉绿，中年危机感严重，回来这里给自己做个总结，也给自己订一下目标。&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="cyl" scheme="http://icyl.rocks/tags/cyl/"/>
+    
+  </entry>
+  
+  <entry>
     <title>android的handler机制</title>
     <link href="http://icyl.rocks/2018/03/26/android_handler/"/>
     <id>http://icyl.rocks/2018/03/26/android_handler/</id>
     <published>2018-03-26T14:22:22.000Z</published>
-    <updated>2019-08-26T13:47:54.261Z</updated>
+    <updated>2020-01-02T17:09:22.509Z</updated>
     
     <summary type="html">
     
@@ -39,7 +57,7 @@
     <link href="http://icyl.rocks/2017/11/08/Trampoline/"/>
     <id>http://icyl.rocks/2017/11/08/Trampoline/</id>
     <published>2017-11-08T12:00:35.000Z</published>
-    <updated>2019-08-26T13:47:54.261Z</updated>
+    <updated>2020-01-02T17:09:22.509Z</updated>
     
     <summary type="html">
     
@@ -59,7 +77,7 @@
     <link href="http://icyl.rocks/2017/08/01/handle-infinity-with-stream-and-generator/"/>
     <id>http://icyl.rocks/2017/08/01/handle-infinity-with-stream-and-generator/</id>
     <published>2017-08-01T11:57:30.000Z</published>
-    <updated>2019-08-26T13:47:54.261Z</updated>
+    <updated>2020-01-02T17:09:22.509Z</updated>
     
     <summary type="html">
     
@@ -91,7 +109,7 @@
     <link href="http://icyl.rocks/2017/07/01/stream_in_scala/"/>
     <id>http://icyl.rocks/2017/07/01/stream_in_scala/</id>
     <published>2017-07-01T11:57:30.000Z</published>
-    <updated>2019-08-26T13:47:54.261Z</updated>
+    <updated>2020-01-02T17:09:22.509Z</updated>
     
     <summary type="html">
     
@@ -111,7 +129,7 @@
     <link href="http://icyl.rocks/2017/03/27/HttpURLConnection-and-webview/"/>
     <id>http://icyl.rocks/2017/03/27/HttpURLConnection-and-webview/</id>
     <published>2017-03-27T06:34:40.000Z</published>
-    <updated>2019-08-26T13:47:54.261Z</updated>
+    <updated>2020-01-02T17:09:22.509Z</updated>
     
     <summary type="html">
     
@@ -134,7 +152,7 @@
     <link href="http://icyl.rocks/2017/02/15/lazy_evalutaion_in_scala/"/>
     <id>http://icyl.rocks/2017/02/15/lazy_evalutaion_in_scala/</id>
     <published>2017-02-15T11:57:30.000Z</published>
-    <updated>2019-08-26T13:47:54.261Z</updated>
+    <updated>2020-01-02T17:09:22.509Z</updated>
     
     <summary type="html">
     
@@ -154,7 +172,7 @@
     <link href="http://icyl.rocks/2017/01/31/Hello_CYL/"/>
     <id>http://icyl.rocks/2017/01/31/Hello_CYL/</id>
     <published>2017-01-31T15:59:59.000Z</published>
-    <updated>2019-08-26T13:47:54.261Z</updated>
+    <updated>2020-01-02T17:09:22.509Z</updated>
     
     <summary type="html">
     
@@ -164,7 +182,7 @@
     </summary>
     
     
-      <category term="hexo" scheme="http://icyl.rocks/tags/hexo/"/>
+      <category term="cyl" scheme="http://icyl.rocks/tags/cyl/"/>
     
   </entry>
   

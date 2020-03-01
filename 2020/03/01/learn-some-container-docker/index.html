@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>容器学习系列-初识docker | cyl&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="对容器和devops感兴趣已久，但是之前犯懒加上工作上没机会接触，一直没认真去了解，最近乘着长假，就着《深入浅出Docker》和菜鸟教程开始入门Docker，也在自己破电脑上耍了下单机版，记录一下学习小结。">
+<meta name="keywords" content="container,docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="容器学习系列-初识docker">
+<meta property="og:url" content="http://icyl.rocks/2020/03/01/learn-some-container-docker/index.html">
+<meta property="og:site_name" content="cyl&#39;s blog">
+<meta property="og:description" content="对容器和devops感兴趣已久，但是之前犯懒加上工作上没机会接触，一直没认真去了解，最近乘着长假，就着《深入浅出Docker》和菜鸟教程开始入门Docker，也在自己破电脑上耍了下单机版，记录一下学习小结。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-03-01T11:29:06.980Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="容器学习系列-初识docker">
+<meta name="twitter:description" content="对容器和devops感兴趣已久，但是之前犯懒加上工作上没机会接触，一直没认真去了解，最近乘着长假，就着《深入浅出Docker》和菜鸟教程开始入门Docker，也在自己破电脑上耍了下单机版，记录一下学习小结。">
+  
+    <link rel="alternative" href="/atom.xml" title="cyl&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-91857907-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head></html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <section id="main"><article id="post-learn-some-container-docker" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      容器学习系列-初识docker
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2020/03/01/learn-some-container-docker/" class="article-date">
+  <time datetime="2020-03-01T11:19:39.000Z" itemprop="datePublished">2020-03-01</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>对容器和devops感兴趣已久，但是之前犯懒加上工作上没机会接触，一直没认真去了解，最近乘着长假，就着<a href="https://book.douban.com/subject/30486354/" target="_blank" rel="noopener">《深入浅出Docker》</a>和<a href="https://www.runoob.com/docker/docker-tutorial.html" target="_blank" rel="noopener">菜鸟教程</a>开始入门Docker，也在自己破电脑上耍了下单机版，记录一下学习小结。<br><a id="more"></a></p>
+<h3 id="回顾：ops与IaaS"><a href="#回顾：ops与IaaS" class="headerlink" title="回顾：ops与IaaS"></a>回顾：ops与IaaS</h3><p>首先回顾一下之前经历过的服务器管理和openstack学习。</p>
+<p>以前在实验室管刀片服务器的时候，需要先在服务器裸机上装vmware，然后通过vmware来加载镜像（操作系统镜像），再新增和管理实例，本质上是通过hypervisor层来管理物理服务器资源，向上提供节点实例（类比实际的物理机器节点），打比方把服务器的计算资源比作一个大蛋糕，hypervisor层负责切分出并管理一个个小蛋糕。</p>
+<p>这种模式最典型的例子是VPS零售商，向用户交付虚拟主机裸机。从ops的角度，不方便的地方一个是基于单一物理服务器，扩展和迁移不太灵活，一个是管理上没有什么现成运维管理工具需要额外定制开发，还有就是虚拟机镜像的更新和维护也十分笨重。而从dev角度来看，用户（也就是开发人员）需要额外去搞定开发/运行相关配置，如装依赖、下代码、跑通环境等等。</p>
+<p>后来调研鼓捣了下openstack（folsom/grizly版本），openstack是在hypervisor之上的IaaS管理平台，与普通hypervisor的主要不同在于：</p>
+<ol>
+<li>提供一站式的IaaS服务；</li>
+<li>显式划分出计算、网络、存储几种核心资源的管理组件，hypervisor归入计算组件下管理；</li>
+<li>面向现有服务器集群部署，根据节点部署的对应openstack服务，划分为管理节点、计算节点、网络节点、存储节点，同一个节点可以身兼数职；</li>
+</ol>
+<p>这种模式典型的是AWS、阿里云等云服务商，提供比较全面的基础设施资源管理能力，但是笨重的镜像问题仍然存在，而且如果是基于现有集群再启新VM的方式，性能花销不小。开发人员拿到VM实例后也还是要去重复的调开发/运行环境。</p>
+<h3 id="docker初览"><a href="#docker初览" class="headerlink" title="docker初览"></a>docker初览</h3><p>随着容器技术的发展，docker横空出世。docker提供一种轻量级VM-容器的概念，可以实现快速灵活的实例生成和部署维护，其优点主要基于以下两点：</p>
+<p><strong>内核共享的隔离技术</strong></p>
+<p>docker容器和普通VM最大的不同，在于容器实例是利用共享内核的隔离技术创建出来的，而普通VM实例则是基于（硬件）虚拟化技术创建出来的。（硬件）虚拟化创建出来的VM实例本质上是在物理设备上运行的一个个独立的OS，而通过docker创建出来的容器实例，则可以理解为通过进程空间隔离、资源限制、目录结构隔离创建出沙盒环境，然后在该沙盒内挂载对应镜像的文件系统，从而提供一个类虚拟机的运行实例。通过共享宿主OS内核，容器的运行开销相对于虚拟化VM来说有所降低，因此容器实例可以提供进程级别的启动速度和性能。</p>
+<p><strong>多层结构镜像与标准化构建</strong></p>
+<p>容器镜像本质上是对运行环境文件系统的打包，docker的镜像为分层结构，类比面向对象的父类继承结构，一个docker镜像可能由多层组成，不同镜像间可能会共享某些镜像层，基于分层结构，镜像的更新可以实现增量更新，每次更新只需要下载差异的部分，这可以大大加快镜像分发部署和容器迁移。</p>
+<p>同时通过Dockerfile，docker可以提供统一的镜像封装机制，以往ops积累的shell脚本、perl脚本、python脚本，都可以统一纳入Dockerfile来管理维护，Dockerfile本身作为部署计划的脚本化成果可以纳入版本管理，而对应构建出来的容器镜像则作为部署动作的发起点。这个和Google SRE的运维工程化以及DevOps理念是一致的。</p>
+<p>利用容器镜像来交付应用，docker可以为迁移和部署（尤其是跨环境情况）的一致性提供保证，加上容器本身的隔离性，这个可以大大减轻开发和部署人员的心理压力。</p>
+<h3 id="容器的使用"><a href="#容器的使用" class="headerlink" title="容器的使用"></a>容器的使用</h3><p>既然容器这么好用，作为一个开发人员，应该如何使用容器呢？</p>
+<p>从开发规模来看，如果是个人/小团队的原型开发情况，感觉docker很适合作为部署工具纳入持续集成流程来快速部署验证应用，同时也可以为实际部署积累工程化成果；</p>
+<p>而如果是大型项目开发，则要考虑系统本身（或部分组件）是否合适容器化。对于应用开发者而言，容器实例更接近于一个进程和其对应运行环境（文件系统）的快照，将容器实例类比为一个运行在独立节点（与其它组件进程没有必须处于同一节点的约束条件）上且对外暴露端口的JVM进程可能对于开发工程师来说更好理解。所以在决定将应用系统容器化前，要先问自己几个问题：</p>
+<ol>
+<li>系统考虑作容器化的相关组件，是否正在以上述形式运行；</li>
+<li>如果不是，是否可以改造成以上述形式运行；</li>
+<li>系统目前的部署运行模式，是否比容器模式有着更好的监控、容错、灾备保障；</li>
+<li>系统是否处于变化和更新频率较高的水平；</li>
+<li>是否存在跨环境的部署/迁移需求；</li>
+</ol>
+<p>感觉对于可以被拆分出来的无状态服务，容器化是值得考虑的一个方案。</p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/01/01/Hello_CYL_2019-2020/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">2019小结</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <script type="text/javascript">
+      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'youlingmaninfo'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>
+    Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
+  </div>
+</section>
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/youlingman" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2020 youlingman 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/Alex-fun/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a href="https://github.com/youlingman" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'youlingmaninfo';
+  
+  var disqus_url = 'http://icyl.rocks/2020/03/01/learn-some-container-docker/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

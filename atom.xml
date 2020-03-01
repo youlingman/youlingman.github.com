@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://icyl.rocks/"/>
-  <updated>2020-03-01T10:48:39.275Z</updated>
+  <updated>2020-03-01T11:29:06.980Z</updated>
   <id>http://icyl.rocks/</id>
   
   <author>
@@ -17,11 +17,31 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>容器学习系列-初识docker</title>
+    <link href="http://icyl.rocks/2020/03/01/learn-some-container-docker/"/>
+    <id>http://icyl.rocks/2020/03/01/learn-some-container-docker/</id>
+    <published>2020-03-01T11:19:39.000Z</published>
+    <updated>2020-03-01T11:29:06.980Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;对容器和devops感兴趣已久，但是之前犯懒加上工作上没机会接触，一直没认真去了解，最近乘着长假，就着&lt;a href=&quot;https://book.douban.com/subject/30486354/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;《深入浅出Docker》&lt;/a&gt;和&lt;a href=&quot;https://www.runoob.com/docker/docker-tutorial.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;菜鸟教程&lt;/a&gt;开始入门Docker，也在自己破电脑上耍了下单机版，记录一下学习小结。&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="container" scheme="http://icyl.rocks/tags/container/"/>
+    
+      <category term="docker" scheme="http://icyl.rocks/tags/docker/"/>
+    
+  </entry>
+  
+  <entry>
     <title>2019小结</title>
     <link href="http://icyl.rocks/2020/01/01/Hello_CYL_2019-2020/"/>
     <id>http://icyl.rocks/2020/01/01/Hello_CYL_2019-2020/</id>
     <published>2020-01-01T15:59:59.000Z</published>
-    <updated>2020-03-01T10:48:39.275Z</updated>
+    <updated>2020-03-01T11:29:06.980Z</updated>
     
     <summary type="html">
     
@@ -39,7 +59,7 @@
     <link href="http://icyl.rocks/2018/03/26/android_handler/"/>
     <id>http://icyl.rocks/2018/03/26/android_handler/</id>
     <published>2018-03-26T14:22:22.000Z</published>
-    <updated>2020-03-01T10:48:39.275Z</updated>
+    <updated>2020-03-01T11:29:06.980Z</updated>
     
     <summary type="html">
     
@@ -57,7 +77,7 @@
     <link href="http://icyl.rocks/2017/11/08/Trampoline/"/>
     <id>http://icyl.rocks/2017/11/08/Trampoline/</id>
     <published>2017-11-08T12:00:35.000Z</published>
-    <updated>2020-03-01T10:48:39.275Z</updated>
+    <updated>2020-03-01T11:29:06.980Z</updated>
     
     <summary type="html">
     
@@ -77,7 +97,7 @@
     <link href="http://icyl.rocks/2017/08/01/handle-infinity-with-stream-and-generator/"/>
     <id>http://icyl.rocks/2017/08/01/handle-infinity-with-stream-and-generator/</id>
     <published>2017-08-01T11:57:30.000Z</published>
-    <updated>2020-03-01T10:48:39.275Z</updated>
+    <updated>2020-03-01T11:29:06.980Z</updated>
     
     <summary type="html">
     
@@ -109,7 +129,7 @@
     <link href="http://icyl.rocks/2017/07/01/stream_in_scala/"/>
     <id>http://icyl.rocks/2017/07/01/stream_in_scala/</id>
     <published>2017-07-01T11:57:30.000Z</published>
-    <updated>2020-03-01T10:48:39.275Z</updated>
+    <updated>2020-03-01T11:29:06.980Z</updated>
     
     <summary type="html">
     
@@ -129,7 +149,7 @@
     <link href="http://icyl.rocks/2017/03/27/HttpURLConnection-and-webview/"/>
     <id>http://icyl.rocks/2017/03/27/HttpURLConnection-and-webview/</id>
     <published>2017-03-27T06:34:40.000Z</published>
-    <updated>2020-03-01T10:48:39.275Z</updated>
+    <updated>2020-03-01T11:29:06.980Z</updated>
     
     <summary type="html">
     
@@ -152,7 +172,7 @@
     <link href="http://icyl.rocks/2017/02/15/lazy_evalutaion_in_scala/"/>
     <id>http://icyl.rocks/2017/02/15/lazy_evalutaion_in_scala/</id>
     <published>2017-02-15T11:57:30.000Z</published>
-    <updated>2020-03-01T10:48:39.275Z</updated>
+    <updated>2020-03-01T11:29:06.980Z</updated>
     
     <summary type="html">
     
@@ -172,7 +192,7 @@
     <link href="http://icyl.rocks/2017/01/31/Hello_CYL/"/>
     <id>http://icyl.rocks/2017/01/31/Hello_CYL/</id>
     <published>2017-01-31T15:59:59.000Z</published>
-    <updated>2020-03-01T10:48:39.275Z</updated>
+    <updated>2020-03-01T11:29:06.980Z</updated>
     
     <summary type="html">
     

@@ -24,6 +24,8 @@ install:
 before_script:
 - git config --global user.name 'youlingman'
 - git config --global user.email 'chenyoucyl@gmail.com'
+- sed -i'' "s~GITALK_CLIENTID~${GITALK_CLIENTID}~" _config.yml
+- sed -i'' "s~GITALK_CLIENTSECRET~${GITALK_CLIENTSECRET}~" _config.yml
 
 script:
 - hexo generate
@@ -31,8 +33,6 @@ script:
 after_success:
 - git clone --depth=50 --branch=master https://github.com/youlingman/youlingman.github.com.git .deploy_git
 - sed -i'' "s~git@github.com:youlingman/youlingman.github.com.git~https://${GITHUB_API_KEY}:x-oauth-basic@github.com/youlingman/youlingman.github.com.git~" _config.yml
-#- sed -i'' "s~GITALK_CLIENTID~${GITALK_CLIENTID}~" _config.yml
-#- sed -i'' "s~GITALK_CLIENTSECRET~${GITALK_CLIENTSECRET}~" _config.yml
 #- sed -i'' "s~git@e.coding.net:youlingman/hexo.git~https://youlingman:${CODING_API_KEY}@e.coding.net/youlingman/hexo.git~" _config.yml
 - hexo deploy --silent
 #- hexo deploy

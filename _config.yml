@@ -61,7 +61,17 @@ per_page: 5
 pagination_dir: page
 
 # Disqus Disqus
-disqus_shortname: youlingmaninfo
+#disqus_shortname: youlingmaninfo
+
+# gitalk
+gitalk:
+  enable: true
+  clientID: GITALK_CLIENTID
+  ClientSecret: GITALK_CLIENTSECRET
+  repo: youlingman.github.com
+  owner: youlingman
+  admin: youlingman
+  distractionFreeMode: true
 
 # Extensions
 ## Plugins: https://hexo.io/plugins/

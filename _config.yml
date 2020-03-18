@@ -66,8 +66,8 @@ pagination_dir: page
 # gitalk
 gitalk:
   enable: true
-  clientID: GITALK_CLIENTID
-  ClientSecret: GITALK_CLIENTSECRET
+  clientID: 4178d7f0ed6bb025e545
+  ClientSecret: dbb0e0a9532453611c0fa1e8f0942059c6478b67
   repo: youlingman.github.com
   owner: youlingman
   admin: youlingman

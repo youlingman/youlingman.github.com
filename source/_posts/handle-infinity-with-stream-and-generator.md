@@ -4,6 +4,7 @@ date: 2017-08-01 19:57:30
 tags: [scala,python]
 ---
 [上一篇介绍stream](/2017/07/01/stream_in_scala/)里提到，scala中的Stream可以利用其延迟计算的特性表达和处理无穷序列，而python中则提供了一种称为generator生成器的机制。下面讨论下stream和generator如何表达无穷序列。
+<!--more-->
 
 ### 无穷序列的生成/处理
 
@@ -36,7 +37,7 @@ def fib(n):
 >>> fibs
 [1, 1, 2, 3, 5]
 ```
-<!--more-->
+
 ### Stream：函数式编程、延迟计算、不可变容器
 
 在scala中，通过Stream可以获得对无穷序列的表达能力，这里的表达能力是指通过将序列的递推生成算法映射到Stream对象的构造逻辑，然后就可以指着这个Stream对象说它就是一个对应的无穷序列。下面从[Stream docs](https://www.scala-lang.org/api/current/scala/collection/immutable/Stream.html)抄了fibonacci序列的对应Stream（#::改成cons以便理解）。

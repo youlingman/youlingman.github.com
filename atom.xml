@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://icyl.rocks/"/>
-  <updated>2020-03-18T13:29:07.616Z</updated>
+  <updated>2020-03-18T13:51:04.055Z</updated>
   <id>http://icyl.rocks/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://icyl.rocks/2020/03/12/oauth-and-openid/"/>
     <id>http://icyl.rocks/2020/03/12/oauth-and-openid/</id>
     <published>2020-03-12T14:12:31.000Z</published>
-    <updated>2020-03-18T13:29:07.616Z</updated>
+    <updated>2020-03-18T13:51:04.055Z</updated>
     
     <summary type="html">
     
@@ -41,7 +41,7 @@
     <link href="http://icyl.rocks/2020/03/01/learn-some-container-docker/"/>
     <id>http://icyl.rocks/2020/03/01/learn-some-container-docker/</id>
     <published>2020-03-01T11:19:39.000Z</published>
-    <updated>2020-03-18T13:29:07.616Z</updated>
+    <updated>2020-03-18T13:51:04.055Z</updated>
     
     <summary type="html">
     
@@ -61,7 +61,7 @@
     <link href="http://icyl.rocks/2020/01/01/Hello_CYL_2019-2020/"/>
     <id>http://icyl.rocks/2020/01/01/Hello_CYL_2019-2020/</id>
     <published>2020-01-01T15:59:59.000Z</published>
-    <updated>2020-03-18T13:29:07.616Z</updated>
+    <updated>2020-03-18T13:51:04.055Z</updated>
     
     <summary type="html">
     
@@ -79,7 +79,7 @@
     <link href="http://icyl.rocks/2018/03/26/android_handler/"/>
     <id>http://icyl.rocks/2018/03/26/android_handler/</id>
     <published>2018-03-26T14:22:22.000Z</published>
-    <updated>2020-03-18T13:29:07.616Z</updated>
+    <updated>2020-03-18T13:51:04.055Z</updated>
     
     <summary type="html">
     
@@ -97,7 +97,7 @@
     <link href="http://icyl.rocks/2017/11/08/Trampoline/"/>
     <id>http://icyl.rocks/2017/11/08/Trampoline/</id>
     <published>2017-11-08T12:00:35.000Z</published>
-    <updated>2020-03-18T13:29:07.616Z</updated>
+    <updated>2020-03-18T13:51:04.055Z</updated>
     
     <summary type="html">
     
@@ -117,23 +117,11 @@
     <link href="http://icyl.rocks/2017/08/01/handle-infinity-with-stream-and-generator/"/>
     <id>http://icyl.rocks/2017/08/01/handle-infinity-with-stream-and-generator/</id>
     <published>2017-08-01T11:57:30.000Z</published>
-    <updated>2020-03-18T13:29:07.616Z</updated>
+    <updated>2020-03-18T13:51:04.055Z</updated>
     
     <summary type="html">
     
-      &lt;p&gt;&lt;a href=&quot;/2017/07/01/stream_in_scala/&quot;&gt;上一篇介绍stream&lt;/a&gt;里提到，scala中的Stream可以利用其延迟计算的特性表达和处理无穷序列，而python中则提供了一种称为generator生成器的机制。下面讨论下stream和generator如何表达无穷序列。&lt;/p&gt;
-&lt;h3 id=&quot;无穷序列的生成-处理&quot;&gt;&lt;a href=&quot;#无穷序列的生成-处理&quot; class=&quot;headerlink&quot; title=&quot;无穷序列的生成/处理&quot;&gt;&lt;/a&gt;无穷序列的生成/处理&lt;/h3&gt;&lt;p&gt;如何生成一个无穷序列，可以有以下几种方式：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;重复某（几）个元素生成序列；&lt;/li&gt;
-&lt;li&gt;通过随机生成每个元素生成序列；&lt;/li&gt;
-&lt;li&gt;通过特定的递推算法生成序列；&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;而重复和随机元素都可以归为一种特定的递归算法，下面就以递推生成序列为例。&lt;/p&gt;
-&lt;p&gt;当然，任何程序都无法对无穷进行整体操作，一般对无穷序列的处理，主要是对无穷序列进行相应的筛选/截取，以得到想要的有穷数据/信息。比如 &lt;a href=&quot;https://en.wikipedia.org/wiki/Fibonacci_number&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Fibonacci number&lt;/a&gt; 就是一个无穷大的序列，对这个序列整体进行处理是不可用的，比如统计序列长度、计算均值等等，我们一般会进行的操作是获取前十个数、获取在[100,200]区间内的fibonacci数等等。&lt;/p&gt;
-&lt;p&gt;生成一个fibonacci序列可以通过一个&lt;a href=&quot;https://en.wikipedia.org/wiki/Corecursion&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;递推&lt;/a&gt;（这个wiki挺有意思）算法来完成，下面是获取第n个fibonacci数的递推算法。&lt;/p&gt;
-&lt;figure class=&quot;highlight python&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;fib&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(n)&lt;/span&gt;:&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; n==&lt;span class=&quot;number&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;or&lt;/span&gt; n==&lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		&lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; fib(n&lt;span class=&quot;number&quot;&gt;-1&lt;/span&gt;)+fib(n&lt;span class=&quot;number&quot;&gt;-2&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;而获取前五个fibonacci数最直接的算法，就是直接通过递推算法逐个获取对应的fibonacci数（废话）。&lt;/p&gt;
-&lt;figure class=&quot;highlight python&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;meta&quot;&gt;&amp;gt;&amp;gt;&amp;gt; &lt;/span&gt;fibs = []&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;meta&quot;&gt;&amp;gt;&amp;gt;&amp;gt; &lt;/span&gt;&lt;span class=&quot;keyword&quot;&gt;for&lt;/span&gt; i &lt;span class=&quot;keyword&quot;&gt;in&lt;/span&gt; range(&lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;6&lt;/span&gt;):&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;meta&quot;&gt;... &lt;/span&gt;  fibs.append(fib(i))&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;...&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;meta&quot;&gt;&amp;gt;&amp;gt;&amp;gt; &lt;/span&gt;fibs&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;[&lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;3&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;5&lt;/span&gt;]&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+      &lt;p&gt;&lt;a href=&quot;/2017/07/01/stream_in_scala/&quot;&gt;上一篇介绍stream&lt;/a&gt;里提到，scala中的Stream可以利用其延迟计算的特性表达和处理无穷序列，而python中则提供了一种称为generator生成器的机制。下面讨论下stream和generator如何表达无穷序列。&lt;br&gt;
     
     </summary>
     
@@ -149,7 +137,7 @@
     <link href="http://icyl.rocks/2017/07/01/stream_in_scala/"/>
     <id>http://icyl.rocks/2017/07/01/stream_in_scala/</id>
     <published>2017-07-01T11:57:30.000Z</published>
-    <updated>2020-03-18T13:29:07.620Z</updated>
+    <updated>2020-03-18T13:51:04.055Z</updated>
     
     <summary type="html">
     
@@ -169,7 +157,7 @@
     <link href="http://icyl.rocks/2017/03/27/HttpURLConnection-and-webview/"/>
     <id>http://icyl.rocks/2017/03/27/HttpURLConnection-and-webview/</id>
     <published>2017-03-27T06:34:40.000Z</published>
-    <updated>2020-03-18T13:29:07.616Z</updated>
+    <updated>2020-03-18T13:51:04.055Z</updated>
     
     <summary type="html">
     
@@ -192,7 +180,7 @@
     <link href="http://icyl.rocks/2017/02/15/lazy_evalutaion_in_scala/"/>
     <id>http://icyl.rocks/2017/02/15/lazy_evalutaion_in_scala/</id>
     <published>2017-02-15T11:57:30.000Z</published>
-    <updated>2020-03-18T13:29:07.616Z</updated>
+    <updated>2020-03-18T13:51:04.055Z</updated>
     
     <summary type="html">
     
@@ -212,7 +200,7 @@
     <link href="http://icyl.rocks/2017/01/31/Hello_CYL/"/>
     <id>http://icyl.rocks/2017/01/31/Hello_CYL/</id>
     <published>2017-01-31T15:59:59.000Z</published>
-    <updated>2020-03-18T13:29:07.616Z</updated>
+    <updated>2020-03-18T13:51:04.055Z</updated>
     
     <summary type="html">
     

@@ -9,11 +9,11 @@
 <meta name="keywords" content="functional,scala">
 <meta property="og:type" content="article">
 <meta property="og:title" content="scala中的延迟求值">
-<meta property="og:url" content="http://icyl.rocks/2017/02/15/lazy_evalutaion_in_scala/index.html">
+<meta property="og:url" content="http://icyl.rocks/2017/02/15/lazy-evalutaion-in-scala/index.html">
 <meta property="og:site_name" content="cyl&#39;s blog">
 <meta property="og:description" content="在做scala99的P91 Knight’s tour时，需要递归搜索整个解题空间找到所有可能的解，如果只想要得到部分解，就要先算出全量解再作筛选，这样就要作多余的运算了。在其他编程语言一般利用控制流来实现，即利用if-else条件判断和return返回提前终止搜索过程，而在scala里更functional的写法是利用延迟求值，这里整理下相关的概念。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-03-18T13:51:04.055Z">
+<meta property="og:updated_time" content="2020-03-28T06:36:25.979Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="scala中的延迟求值">
 <meta name="twitter:description" content="在做scala99的P91 Knight’s tour时，需要递归搜索整个解题空间找到所有可能的解，如果只想要得到部分解，就要先算出全量解再作筛选，这样就要作多余的运算了。在其他编程语言一般利用控制流来实现，即利用if-else条件判断和return返回提前终止搜索过程，而在scala里更functional的写法是利用延迟求值，这里整理下相关的概念。">
@@ -32,7 +32,7 @@
   <div id="container">
     <div id="wrap">
       <div class="outer">
-        <section id="main"><article id="post-lazy_evalutaion_in_scala" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-lazy-evalutaion-in-scala" class="article article-type-post" itemscope itemprop="blogPost">
   
   <div class="article-inner">
     
@@ -47,7 +47,7 @@
       </header>
     
     <div class="article-meta">
-      <a href="/2017/02/15/lazy_evalutaion_in_scala/" class="article-date">
+      <a href="/2017/02/15/lazy-evalutaion-in-scala/" class="article-date">
   <time datetime="2017-02-15T11:57:30.000Z" itemprop="datePublished">2017-02-15</time>
 </a>
       
@@ -105,7 +105,7 @@
     </a>
   
   
-    <a href="/2017/01/31/Hello_CYL/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2017/01/31/HelloCYL/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">Hello CYL</div>
     </a>

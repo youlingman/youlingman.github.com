@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>tomcat如何处理请求：connector篇 | cyl&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="tomcat是一个Java实现的开源Web应用服务器，目前也是SpringBoot框架的默认内嵌引擎。最近用SpringBoot工程追了下内嵌tomcat的源码，记录一下“tomcat如何处理一次HTTP请求”的过程。">
+<meta name="keywords" content="web">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tomcat如何处理请求：connector篇">
+<meta property="og:url" content="http://icyl.rocks/2020/04/11/tomcat-connector/index.html">
+<meta property="og:site_name" content="cyl&#39;s blog">
+<meta property="og:description" content="tomcat是一个Java实现的开源Web应用服务器，目前也是SpringBoot框架的默认内嵌引擎。最近用SpringBoot工程追了下内嵌tomcat的源码，记录一下“tomcat如何处理一次HTTP请求”的过程。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-04-11T13:00:21.700Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="tomcat如何处理请求：connector篇">
+<meta name="twitter:description" content="tomcat是一个Java实现的开源Web应用服务器，目前也是SpringBoot框架的默认内嵌引擎。最近用SpringBoot工程追了下内嵌tomcat的源码，记录一下“tomcat如何处理一次HTTP请求”的过程。">
+  
+    <link rel="alternative" href="/atom.xml" title="cyl&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script> 
+</head></html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <section id="main"><article id="post-tomcat-connector" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      tomcat如何处理请求：connector篇
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2020/04/11/tomcat-connector/" class="article-date">
+  <time datetime="2020-04-11T12:58:01.000Z" itemprop="datePublished">2020-04-11</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>tomcat是一个Java实现的开源Web应用服务器，目前也是SpringBoot框架的默认内嵌引擎。最近用SpringBoot工程追了下内嵌tomcat的源码，记录一下“tomcat如何处理一次HTTP请求”的过程。<br><a id="more"></a></p>
+<h1 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h1><p>应用服务器是部署Web应用的容器，外部可以通过HTTP请求与应用进行交互，应用服务器负责响应请求，维护连接，将请求分发到对应应用逻辑执行并返回结果。</p>
+<p>一个tomcat服务由（一到多个）连接器Connector和（一个）容器Container组成，其中Connector完成了接受请求建立连接的部分，Container则负责执行处理应用请求的应用层逻辑。</p>
+<h1 id="请求处理流程"><a href="#请求处理流程" class="headerlink" title="请求处理流程"></a>请求处理流程</h1><p>每个Connector负责在指定的端口上监听请求，建立socket tcp连接，解析请求实例化Request和Response对象，然后传递给Container的对应servlet，在servlet内完成对请求的处理和返回。</p>
+<p>Connector由Endpoint、Processor、Adapter几个核心组件构成，其启动时会启动Endpoint负责监听端口等待连接请求，当客户端请求到达时首先就会从Endpoint开始被处理。</p>
+<h2 id="Endpoint"><a href="#Endpoint" class="headerlink" title="Endpoint"></a>Endpoint</h2><p>Endpoint是典型的单进程多线程模型，请求到达tomcat时，由Endpoint完成连接维护和底层IO操作封装，然后将封装好的SocketWrapper交给Processor进行HTTP协议处理。注意tomcat的连接数和线程数都是在Endpoint这里进行控制。</p>
+<p>Endpoint共有NIO、NIO2和APR三种模式。</p>
+<h3 id="NioEndpoint"><a href="#NioEndpoint" class="headerlink" title="NioEndpoint"></a>NioEndpoint</h3><p>NIO模式，对应Java的nio包的阻塞io系列实现。NIO模式包括一个acceptor线程、一个poller线程和worker线程池。Connector初始化时，启动acceptor线程，利用ServerSocketChannel轮询监听端口，当有新的请求时accept建立连接，把新的连接socket封装成事件添加到poller的事件队列中。</p>
+<p>poller线程负责轮询处理事件队列，将事件里封装的连接socket注册到selector上，然后用selector监听连接集上的IO事件，最后将活跃socket分发给woker线程池处理。</p>
+<p>NIO模式下的NioSocketWrapper利用SocketChannel和Selector封装对socket进行读写，支持后续servlet的输入流和输出流，针对sendfile静态文件请求则基于FileChannel的transferTo方法支持sendfile。</p>
+<h3 id="Nio2Endpoint"><a href="#Nio2Endpoint" class="headerlink" title="Nio2Endpoint"></a>Nio2Endpoint</h3><p>NIO2模式，对应Java的nio包的异步io系列实现。NIO2模式包括acceptor和worker线程，和NIO模式的不同在于acceptor线程交由线程池来统一管理，同时把acceptor的ServerSocketChannel换成了AsynchronousServerSocketChannel，利用AIO/NIO2的异步机制将IO操作交给操作系统完成，可以省去依赖poller利用selector阻塞监听这一步，因此没有用到poller线程，当异步通知CompletionHandler时直接将活跃socket分发给woker线程池处理。</p>
+<p>NIO2模式下的Nio2SocketWrapper利用AsynchronousSocketChannel封装对socket进行读写，但是由于FileChannel的transferTo方法不支持AsynchronousSocketChannel，所以NIO2模式的sendfile处理其实是基于read/write方法来实现的。</p>
+<h3 id="AprEndpoint"><a href="#AprEndpoint" class="headerlink" title="AprEndpoint"></a>AprEndpoint</h3><p>APR模式和NIO模式类似，也是acceptor+poller+worker的方式处理请求，不过其nio包的ServerSocketChannel和Selector换成了用JNI直接调apache库的实现，以提高性能。同时相对NIO模式来说，APR模式额外多加了一个Sendfile线程专门处理sendfile请求的阻塞读写，优化了Nio模式中poller被大文件sendfile请求阻塞（transferTo为阻塞方法）导致的性能下降。</p>
+<h2 id="Processor"><a href="#Processor" class="headerlink" title="Processor"></a>Processor</h2><p>当Endpoint完成底层网络处理后，连接的socket就由独立worker线程交到Processor进行下一步处理。Processor完成的工作是通过socket输入流读取解析HTTP协议头，初始化request和response，然后将request和response传递给adapter进行后续操作。每个连接对应一个Processor实例进行处理。</p>
+<p>注意Processor初始化的request和response是tomcat自己定义的coyote包下的类，而不是servlet接口中的ServletRequest和ServletResponse。通过Endpoint和Processor合作，完成了将底层网络连接socket封装成coyote request/response的工作，这对组合被称为tomcat的连接器组件coyote。</p>
+<h2 id="Adaptor"><a href="#Adaptor" class="headerlink" title="Adaptor"></a>Adaptor</h2><p>Adapter负责连接Connector和Container，其接收Processor传过来的coyote request/response，解析封装后得到ServletRequest/ServletResponse，根据请求URI匹配得到对应容器，然后将ServletRequest/ServletResponse传入关联容器的Pipeline启动第一个Valve，驱动对应servlet容器处理请求流程。</p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>一次HTTP请求在tomcat的Connector处理流程如下：</p>
+<ul>
+<li>请求首先被监听端口的Endpoint接收，Endpoint将连接socket封装成SocketWrapper交给Processor处理，后续请求处理会运行在关联线程池的独立线程内；</li>
+<li>Processor利用连接socket封装得到本次请求对应的coyote request/response实例对，并传递给Adapter处理，至此Connector完成coyote连接器工作；</li>
+<li>Adapter负责适配连接Connector和Container（coyote和servlet），其将Connector自有的coyote request/response请求实例转换成servlet规范的请求实例ServletRequest/ServletResponse，根据请求匹配出对应容器，然后将ServletRequest/ServletResponse传入对应容器，驱动后续servlet处理。</li>
+</ul>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/03/12/oauth-and-openid/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">OAuth与OpenID</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+<section id="comments">
+    <div id="gitalk-container"></div>
+    <script type="text/javascript">
+        var gitalk = new Gitalk({
+              clientID: '4178d7f0ed6bb025e545',
+              clientSecret: 'dbb0e0a9532453611c0fa1e8f0942059c6478b67',
+              repo: 'youlingman.github.com',
+              owner: 'youlingman',
+              admin: 'youlingman',
+              id: location.pathname,      // Ensure uniqueness and length less than 50{{ page.title }}
+              distractionFreeMode: 'true'  // Facebook-like distraction free mode
+        })
+
+        gitalk.render('gitalk-container')
+    </script>
+</section>
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/youlingman" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2020 youlingman 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/Alex-fun/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a href="https://github.com/youlingman" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

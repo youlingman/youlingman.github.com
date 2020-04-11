@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://icyl.rocks/"/>
-  <updated>2020-03-28T06:36:25.979Z</updated>
+  <updated>2020-04-11T13:00:21.700Z</updated>
   <id>http://icyl.rocks/</id>
   
   <author>
@@ -17,11 +17,29 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>tomcat如何处理请求：connector篇</title>
+    <link href="http://icyl.rocks/2020/04/11/tomcat-connector/"/>
+    <id>http://icyl.rocks/2020/04/11/tomcat-connector/</id>
+    <published>2020-04-11T12:58:01.000Z</published>
+    <updated>2020-04-11T13:00:21.700Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;tomcat是一个Java实现的开源Web应用服务器，目前也是SpringBoot框架的默认内嵌引擎。最近用SpringBoot工程追了下内嵌tomcat的源码，记录一下“tomcat如何处理一次HTTP请求”的过程。&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="web" scheme="http://icyl.rocks/tags/web/"/>
+    
+  </entry>
+  
+  <entry>
     <title>OAuth与OpenID</title>
     <link href="http://icyl.rocks/2020/03/12/oauth-and-openid/"/>
     <id>http://icyl.rocks/2020/03/12/oauth-and-openid/</id>
     <published>2020-03-12T14:12:31.000Z</published>
-    <updated>2020-03-28T06:36:25.979Z</updated>
+    <updated>2020-04-11T13:00:21.700Z</updated>
     
     <summary type="html">
     
@@ -41,7 +59,7 @@
     <link href="http://icyl.rocks/2020/03/01/learn-some-container-docker/"/>
     <id>http://icyl.rocks/2020/03/01/learn-some-container-docker/</id>
     <published>2020-03-01T11:19:39.000Z</published>
-    <updated>2020-03-28T06:36:25.979Z</updated>
+    <updated>2020-04-11T13:00:21.700Z</updated>
     
     <summary type="html">
     
@@ -61,7 +79,7 @@
     <link href="http://icyl.rocks/2020/01/01/HelloCYL-2019_2020/"/>
     <id>http://icyl.rocks/2020/01/01/HelloCYL-2019_2020/</id>
     <published>2020-01-01T15:59:59.000Z</published>
-    <updated>2020-03-28T06:36:25.979Z</updated>
+    <updated>2020-04-11T13:00:21.700Z</updated>
     
     <summary type="html">
     
@@ -79,7 +97,7 @@
     <link href="http://icyl.rocks/2018/03/26/android-handler/"/>
     <id>http://icyl.rocks/2018/03/26/android-handler/</id>
     <published>2018-03-26T14:22:22.000Z</published>
-    <updated>2020-03-28T06:36:25.979Z</updated>
+    <updated>2020-04-11T13:00:21.700Z</updated>
     
     <summary type="html">
     
@@ -97,7 +115,7 @@
     <link href="http://icyl.rocks/2017/11/08/Trampoline/"/>
     <id>http://icyl.rocks/2017/11/08/Trampoline/</id>
     <published>2017-11-08T12:00:35.000Z</published>
-    <updated>2020-03-28T06:36:25.979Z</updated>
+    <updated>2020-04-11T13:00:21.700Z</updated>
     
     <summary type="html">
     
@@ -117,7 +135,7 @@
     <link href="http://icyl.rocks/2017/08/01/handle-infinity/"/>
     <id>http://icyl.rocks/2017/08/01/handle-infinity/</id>
     <published>2017-08-01T11:57:30.000Z</published>
-    <updated>2020-03-28T06:36:25.979Z</updated>
+    <updated>2020-04-11T13:00:21.700Z</updated>
     
     <summary type="html">
     
@@ -139,7 +157,7 @@
     <link href="http://icyl.rocks/2017/07/01/stream-in-scala/"/>
     <id>http://icyl.rocks/2017/07/01/stream-in-scala/</id>
     <published>2017-07-01T11:57:30.000Z</published>
-    <updated>2020-03-28T06:36:25.979Z</updated>
+    <updated>2020-04-11T13:00:21.700Z</updated>
     
     <summary type="html">
     
@@ -159,7 +177,7 @@
     <link href="http://icyl.rocks/2017/03/27/HttpURLConnection-and-webview/"/>
     <id>http://icyl.rocks/2017/03/27/HttpURLConnection-and-webview/</id>
     <published>2017-03-27T06:34:40.000Z</published>
-    <updated>2020-03-28T06:36:25.979Z</updated>
+    <updated>2020-04-11T13:00:21.700Z</updated>
     
     <summary type="html">
     
@@ -182,7 +200,7 @@
     <link href="http://icyl.rocks/2017/02/15/lazy-evalutaion-in-scala/"/>
     <id>http://icyl.rocks/2017/02/15/lazy-evalutaion-in-scala/</id>
     <published>2017-02-15T11:57:30.000Z</published>
-    <updated>2020-03-28T06:36:25.979Z</updated>
+    <updated>2020-04-11T13:00:21.700Z</updated>
     
     <summary type="html">
     
@@ -202,7 +220,7 @@
     <link href="http://icyl.rocks/2017/01/31/HelloCYL/"/>
     <id>http://icyl.rocks/2017/01/31/HelloCYL/</id>
     <published>2017-01-31T15:59:59.000Z</published>
-    <updated>2020-03-28T06:36:25.979Z</updated>
+    <updated>2020-04-11T13:00:21.700Z</updated>
     
     <summary type="html">
     

@@ -1,0 +1,64 @@
+---
+title: tomcat如何处理请求：connector篇
+tags:
+  - web
+date: 2020-04-11 20:58:01
+---
+
+
+tomcat是一个Java实现的开源Web应用服务器，目前也是SpringBoot框架的默认内嵌引擎。最近用SpringBoot工程追了下内嵌tomcat的源码，记录一下“tomcat如何处理一次HTTP请求”的过程。
+<!--more-->
+
+# 概览
+
+应用服务器是部署Web应用的容器，外部可以通过HTTP请求与应用进行交互，应用服务器负责响应请求，维护连接，将请求分发到对应应用逻辑执行并返回结果。
+
+一个tomcat服务由（一到多个）连接器Connector和（一个）容器Container组成，其中Connector完成了接受请求建立连接的部分，Container则负责执行处理应用请求的应用层逻辑。
+
+# 请求处理流程
+
+每个Connector负责在指定的端口上监听请求，建立socket tcp连接，解析请求实例化Request和Response对象，然后传递给Container的对应servlet，在servlet内完成对请求的处理和返回。
+
+Connector由Endpoint、Processor、Adapter几个核心组件构成，其启动时会启动Endpoint负责监听端口等待连接请求，当客户端请求到达时首先就会从Endpoint开始被处理。
+
+## Endpoint
+
+Endpoint是典型的单进程多线程模型，请求到达tomcat时，由Endpoint完成连接维护和底层IO操作封装，然后将封装好的SocketWrapper交给Processor进行HTTP协议处理。注意tomcat的连接数和线程数都是在Endpoint这里进行控制。
+
+Endpoint共有NIO、NIO2和APR三种模式。
+
+### NioEndpoint
+
+NIO模式，对应Java的nio包的阻塞io系列实现。NIO模式包括一个acceptor线程、一个poller线程和worker线程池。Connector初始化时，启动acceptor线程，利用ServerSocketChannel轮询监听端口，当有新的请求时accept建立连接，把新的连接socket封装成事件添加到poller的事件队列中。
+
+poller线程负责轮询处理事件队列，将事件里封装的连接socket注册到selector上，然后用selector监听连接集上的IO事件，最后将活跃socket分发给woker线程池处理。
+
+NIO模式下的NioSocketWrapper利用SocketChannel和Selector封装对socket进行读写，支持后续servlet的输入流和输出流，针对sendfile静态文件请求则基于FileChannel的transferTo方法支持sendfile。
+
+### Nio2Endpoint
+
+NIO2模式，对应Java的nio包的异步io系列实现。NIO2模式包括acceptor和worker线程，和NIO模式的不同在于acceptor线程交由线程池来统一管理，同时把acceptor的ServerSocketChannel换成了AsynchronousServerSocketChannel，利用AIO/NIO2的异步机制将IO操作交给操作系统完成，可以省去依赖poller利用selector阻塞监听这一步，因此没有用到poller线程，当异步通知CompletionHandler时直接将活跃socket分发给woker线程池处理。
+
+NIO2模式下的Nio2SocketWrapper利用AsynchronousSocketChannel封装对socket进行读写，但是由于FileChannel的transferTo方法不支持AsynchronousSocketChannel，所以NIO2模式的sendfile处理其实是基于read/write方法来实现的。
+
+### AprEndpoint
+
+APR模式和NIO模式类似，也是acceptor+poller+worker的方式处理请求，不过其nio包的ServerSocketChannel和Selector换成了用JNI直接调apache库的实现，以提高性能。同时相对NIO模式来说，APR模式额外多加了一个Sendfile线程专门处理sendfile请求的阻塞读写，优化了Nio模式中poller被大文件sendfile请求阻塞（transferTo为阻塞方法）导致的性能下降。
+
+## Processor
+
+当Endpoint完成底层网络处理后，连接的socket就由独立worker线程交到Processor进行下一步处理。Processor完成的工作是通过socket输入流读取解析HTTP协议头，初始化request和response，然后将request和response传递给adapter进行后续操作。每个连接对应一个Processor实例进行处理。
+
+注意Processor初始化的request和response是tomcat自己定义的coyote包下的类，而不是servlet接口中的ServletRequest和ServletResponse。通过Endpoint和Processor合作，完成了将底层网络连接socket封装成coyote request/response的工作，这对组合被称为tomcat的连接器组件coyote。
+
+## Adaptor
+
+Adapter负责连接Connector和Container，其接收Processor传过来的coyote request/response，解析封装后得到ServletRequest/ServletResponse，根据请求URI匹配得到对应容器，然后将ServletRequest/ServletResponse传入关联容器的Pipeline启动第一个Valve，驱动对应servlet容器处理请求流程。
+
+# 小结
+
+一次HTTP请求在tomcat的Connector处理流程如下：
+
+* 请求首先被监听端口的Endpoint接收，Endpoint将连接socket封装成SocketWrapper交给Processor处理，后续请求处理会运行在关联线程池的独立线程内；
+* Processor利用连接socket封装得到本次请求对应的coyote request/response实例对，并传递给Adapter处理，至此Connector完成coyote连接器工作；
+* Adapter负责适配连接Connector和Container（coyote和servlet），其将Connector自有的coyote request/response请求实例转换成servlet规范的请求实例ServletRequest/ServletResponse，根据请求匹配出对应容器，然后将ServletRequest/ServletResponse传入对应容器，驱动后续servlet处理。

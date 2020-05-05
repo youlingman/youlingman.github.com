@@ -29,6 +29,47 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-skiplist" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/05/skiplist/">skiplist</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2020/05/05/skiplist/" class="article-date">
+  <time datetime="2020-05-05T14:04:12.000Z" itemprop="datePublished">2020-05-05</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在学习《Redis设计与实现》中提到有序集合底层是基于一种叫skip list的数据结构（以及hash table）来实现，JDK中TreeMap的并发包对应实现ConcurrentSkipListMap也用到了这种数据结构。查了下这个数据结构是1989年才发明出来的，在大学时的课本中以及算法导论里貌似从来没出现过，在这里整理一下学习思路。<br>
+        
+          <p class="article-more-link">
+            <a href="/2020/05/05/skiplist/#more">More...</a>
+          </p>
+        
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+  
     <article id="post-tomcat-connector" class="article article-type-post" itemscope itemprop="blogPost">
   
   <div class="article-inner">
@@ -178,47 +219,6 @@
         
           <p class="article-more-link">
             <a href="/2020/01/01/HelloCYL-2019_2020/#more">More...</a>
-          </p>
-        
-      
-
-      
-        
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-android-handler" class="article article-type-post" itemscope itemprop="blogPost">
-  
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/26/android-handler/">android的handler机制</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      <a href="/2018/03/26/android-handler/" class="article-date">
-  <time datetime="2018-03-26T14:22:22.000Z" itemprop="datePublished">2018-03-26</time>
-</a>
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在Android应用里，谷歌只允许在主线程即UI线程更新UI，在这个主线程里做一些耗时的操作会导致<a href="https://developer.android.com/topic/performance/vitals/anr.html" target="_blank" rel="noopener">ANR</a>，于是一些耗时间的操作，如网络请求，就需要搬到额外线程去执行，而耗时操作之后往往又需要返回主/UI线程去更新UI。针对这个场景Android提供了一些组件给开发者使用，包括Handler、HandlerThread和AsyncTask，后两者其实都是基于Handler的实现。</p>
-        
-          <p class="article-more-link">
-            <a href="/2018/03/26/android-handler/#more">More...</a>
           </p>
         
       

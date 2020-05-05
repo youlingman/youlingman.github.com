@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://icyl.rocks/"/>
-  <updated>2020-04-30T10:26:10.993Z</updated>
+  <updated>2020-05-05T14:05:56.263Z</updated>
   <id>http://icyl.rocks/</id>
   
   <author>
@@ -17,11 +17,29 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>skiplist</title>
+    <link href="http://icyl.rocks/2020/05/05/skiplist/"/>
+    <id>http://icyl.rocks/2020/05/05/skiplist/</id>
+    <published>2020-05-05T14:04:12.000Z</published>
+    <updated>2020-05-05T14:05:56.263Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近在学习《Redis设计与实现》中提到有序集合底层是基于一种叫skip list的数据结构（以及hash table）来实现，JDK中TreeMap的并发包对应实现ConcurrentSkipListMap也用到了这种数据结构。查了下这个数据结构是1989年才发明出来的，在大学时的课本中以及算法导论里貌似从来没出现过，在这里整理一下学习思路。&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="algorithm" scheme="http://icyl.rocks/tags/algorithm/"/>
+    
+  </entry>
+  
+  <entry>
     <title>tomcat如何处理请求：connector篇</title>
     <link href="http://icyl.rocks/2020/04/11/tomcat-connector/"/>
     <id>http://icyl.rocks/2020/04/11/tomcat-connector/</id>
     <published>2020-04-11T12:58:01.000Z</published>
-    <updated>2020-04-30T10:26:10.993Z</updated>
+    <updated>2020-05-05T14:05:56.263Z</updated>
     
     <summary type="html">
     
@@ -39,7 +57,7 @@
     <link href="http://icyl.rocks/2020/03/12/oauth-and-openid/"/>
     <id>http://icyl.rocks/2020/03/12/oauth-and-openid/</id>
     <published>2020-03-12T14:12:31.000Z</published>
-    <updated>2020-04-30T10:26:10.993Z</updated>
+    <updated>2020-05-05T14:05:56.263Z</updated>
     
     <summary type="html">
     
@@ -59,7 +77,7 @@
     <link href="http://icyl.rocks/2020/03/01/learn-some-container-docker/"/>
     <id>http://icyl.rocks/2020/03/01/learn-some-container-docker/</id>
     <published>2020-03-01T11:19:39.000Z</published>
-    <updated>2020-04-30T10:26:10.993Z</updated>
+    <updated>2020-05-05T14:05:56.263Z</updated>
     
     <summary type="html">
     
@@ -79,7 +97,7 @@
     <link href="http://icyl.rocks/2020/01/01/HelloCYL-2019_2020/"/>
     <id>http://icyl.rocks/2020/01/01/HelloCYL-2019_2020/</id>
     <published>2020-01-01T15:59:59.000Z</published>
-    <updated>2020-04-30T10:26:10.993Z</updated>
+    <updated>2020-05-05T14:05:56.263Z</updated>
     
     <summary type="html">
     
@@ -97,7 +115,7 @@
     <link href="http://icyl.rocks/2018/03/26/android-handler/"/>
     <id>http://icyl.rocks/2018/03/26/android-handler/</id>
     <published>2018-03-26T14:22:22.000Z</published>
-    <updated>2020-04-30T10:26:10.993Z</updated>
+    <updated>2020-05-05T14:05:56.263Z</updated>
     
     <summary type="html">
     
@@ -115,7 +133,7 @@
     <link href="http://icyl.rocks/2017/11/08/Trampoline/"/>
     <id>http://icyl.rocks/2017/11/08/Trampoline/</id>
     <published>2017-11-08T12:00:35.000Z</published>
-    <updated>2020-04-30T10:26:10.993Z</updated>
+    <updated>2020-05-05T14:05:56.263Z</updated>
     
     <summary type="html">
     
@@ -135,7 +153,7 @@
     <link href="http://icyl.rocks/2017/08/01/handle-infinity/"/>
     <id>http://icyl.rocks/2017/08/01/handle-infinity/</id>
     <published>2017-08-01T11:57:30.000Z</published>
-    <updated>2020-04-30T10:26:10.993Z</updated>
+    <updated>2020-05-05T14:05:56.263Z</updated>
     
     <summary type="html">
     
@@ -157,7 +175,7 @@
     <link href="http://icyl.rocks/2017/07/01/stream-in-scala/"/>
     <id>http://icyl.rocks/2017/07/01/stream-in-scala/</id>
     <published>2017-07-01T11:57:30.000Z</published>
-    <updated>2020-04-30T10:26:10.993Z</updated>
+    <updated>2020-05-05T14:05:56.263Z</updated>
     
     <summary type="html">
     
@@ -177,7 +195,7 @@
     <link href="http://icyl.rocks/2017/03/27/HttpURLConnection-and-webview/"/>
     <id>http://icyl.rocks/2017/03/27/HttpURLConnection-and-webview/</id>
     <published>2017-03-27T06:34:40.000Z</published>
-    <updated>2020-04-30T10:26:10.993Z</updated>
+    <updated>2020-05-05T14:05:56.263Z</updated>
     
     <summary type="html">
     
@@ -200,7 +218,7 @@
     <link href="http://icyl.rocks/2017/02/15/lazy-evalutaion-in-scala/"/>
     <id>http://icyl.rocks/2017/02/15/lazy-evalutaion-in-scala/</id>
     <published>2017-02-15T11:57:30.000Z</published>
-    <updated>2020-04-30T10:26:10.993Z</updated>
+    <updated>2020-05-05T14:05:56.263Z</updated>
     
     <summary type="html">
     
@@ -220,7 +238,7 @@
     <link href="http://icyl.rocks/2017/01/31/HelloCYL/"/>
     <id>http://icyl.rocks/2017/01/31/HelloCYL/</id>
     <published>2017-01-31T15:59:59.000Z</published>
-    <updated>2020-04-30T10:26:10.993Z</updated>
+    <updated>2020-05-05T14:05:56.263Z</updated>
     
     <summary type="html">
     

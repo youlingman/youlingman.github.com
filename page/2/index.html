@@ -29,6 +29,47 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-android-handler" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/26/android-handler/">android的handler机制</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2018/03/26/android-handler/" class="article-date">
+  <time datetime="2018-03-26T14:22:22.000Z" itemprop="datePublished">2018-03-26</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在Android应用里，谷歌只允许在主线程即UI线程更新UI，在这个主线程里做一些耗时的操作会导致<a href="https://developer.android.com/topic/performance/vitals/anr.html" target="_blank" rel="noopener">ANR</a>，于是一些耗时间的操作，如网络请求，就需要搬到额外线程去执行，而耗时操作之后往往又需要返回主/UI线程去更新UI。针对这个场景Android提供了一些组件给开发者使用，包括Handler、HandlerThread和AsyncTask，后两者其实都是基于Handler的实现。</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/03/26/android-handler/#more">More...</a>
+          </p>
+        
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+  
     <article id="post-Trampoline" class="article article-type-post" itemscope itemprop="blogPost">
   
   <div class="article-inner">
@@ -183,47 +224,6 @@
         
           <p class="article-more-link">
             <a href="/2017/03/27/HttpURLConnection-and-webview/#more">More...</a>
-          </p>
-        
-      
-
-      
-        
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-lazy-evalutaion-in-scala" class="article article-type-post" itemscope itemprop="blogPost">
-  
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/15/lazy-evalutaion-in-scala/">scala中的延迟求值</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      <a href="/2017/02/15/lazy-evalutaion-in-scala/" class="article-date">
-  <time datetime="2017-02-15T11:57:30.000Z" itemprop="datePublished">2017-02-15</time>
-</a>
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在做<a href="http://aperiodic.net/phil/scala/s-99/" target="_blank" rel="noopener">scala99</a>的P91 Knight’s tour时，需要递归搜索整个解题空间找到所有可能的解，如果只想要得到部分解，就要先算出全量解再作筛选，这样就要作多余的运算了。在其他编程语言一般利用控制流来实现，即利用if-else条件判断和return返回提前终止搜索过程，而在scala里更functional的写法是利用延迟求值，这里整理下相关的概念。<br>
-        
-          <p class="article-more-link">
-            <a href="/2017/02/15/lazy-evalutaion-in-scala/#more">More...</a>
           </p>
         
       

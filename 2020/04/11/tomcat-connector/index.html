@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="cyl&#39;s blog">
 <meta property="og:description" content="tomcat是一个Java实现的开源Web应用服务器，目前也是SpringBoot框架的默认内嵌引擎。最近用SpringBoot工程追了下内嵌tomcat的源码，记录一下“tomcat如何处理一次HTTP请求”的过程。以下内容基于SpringBoot内嵌tomcat 9.0.26版本。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-05-13T14:44:06.646Z">
+<meta property="og:updated_time" content="2020-05-14T12:19:11.619Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="tomcat如何处理请求：connector篇">
 <meta name="twitter:description" content="tomcat是一个Java实现的开源Web应用服务器，目前也是SpringBoot框架的默认内嵌引擎。最近用SpringBoot工程追了下内嵌tomcat的源码，记录一下“tomcat如何处理一次HTTP请求”的过程。以下内容基于SpringBoot内嵌tomcat 9.0.26版本。">
@@ -71,9 +71,9 @@
 <p>由于FileChannel的transferTo方法不支持AsynchronousSocketChannel，所以NIO2模式的sendfile处理是先将文件filechannel的内容缓存到write buffer，再将write buffer写入到socket去。</p>
 <h3 id="AprEndpoint"><a href="#AprEndpoint" class="headerlink" title="AprEndpoint"></a>AprEndpoint</h3><p>APR模式和NIO模式类似，也是acceptor+poller+worker的请求处理模式，不过nio包的ServerSocketChannel和Selector改成了用JNI直接调apache库的实现，以提高性能。同时相对NIO模式来说，APR模式额外多加了一个Sendfile线程专门处理sendfile写入操作，优化了Nio模式中poller被大文件sendfile写入阻塞导致的性能下降。</p>
 <h2 id="Processor"><a href="#Processor" class="headerlink" title="Processor"></a>Processor</h2><p>当Endpoint完成底层网络处理后，连接的socket就由独立worker线程交到Processor进行下一步处理。在Processor处理之前，ConnectionHandler会根据连接状态维护当前连接集，每条连接对应一个socket-processor对。</p>
-<p>Processor完成的工作是通过socket输入流读取解析HTTP协议和请求头，初始化request和response，然后将request和response传递给adapter进行后续操作。</p>
+<p>Processor完成的工作是通过socket输入流读取解析HTTP请求行和其它头信息，初始化request和response，然后将request和response传递给adapter进行后续操作。经过Processor处理后，请求的URI、query、headers会被解析到request内。</p>
 <p>注意Processor初始化的request和response是tomcat自己定义的coyote包下的类，而不是servlet接口中的ServletRequest和ServletResponse。通过Endpoint和Processor合作，完成了将底层网络连接socket封装成coyote request/response的工作，这对组合被称为tomcat的连接器组件coyote。</p>
-<h2 id="Adaptor"><a href="#Adaptor" class="headerlink" title="Adaptor"></a>Adaptor</h2><p>Adapter负责连接Connector和Container，其接收Processor传过来的coyote request/response，解析封装后得到ServletRequest/ServletResponse，根据请求URI匹配得到对应容器，然后将ServletRequest/ServletResponse传入关联容器的Pipeline启动第一个Valve，驱动对应servlet容器处理请求流程。</p>
+<h2 id="Adaptor"><a href="#Adaptor" class="headerlink" title="Adaptor"></a>Adaptor</h2><p>Adapter负责连接Connector和Container，其接收Processor传过来的coyote request/response，解析封装后得到ServletRequest/ServletResponse，根据请求URI匹配得到对应容器，然后将ServletRequest/ServletResponse传入关联容器的Pipeline启动第一个Valve，驱动对应servlet容器处理请求流程。这里匹配对应container前，需要先尝试从<a href="https://doriantaylor.com/policy/http-url-path-parameter-syntax" target="_blank" rel="noopener">path parameter</a>和cookie解析得到sessionid，如果请求带有sessionid，则要优先匹配包含该sessionid的context容器。</p>
 <h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>一次HTTP请求在tomcat的Connector处理流程如下：</p>
 <ul>
 <li>请求首先被监听端口的Endpoint接收，Endpoint将连接socket封装成SocketWrapper交给Processor处理，后续请求处理会运行在关联线程池的独立线程内；</li>

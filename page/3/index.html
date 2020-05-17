@@ -29,6 +29,52 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-HttpURLConnection-and-webview" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/27/HttpURLConnection-and-webview/">HttpURLConnection和webview的协同使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/03/27/HttpURLConnection-and-webview/" class="article-date">
+  <time datetime="2017-03-27T06:34:40.000Z" itemprop="datePublished">2017-03-27</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="webview中使用post加载"><a href="#webview中使用post加载" class="headerlink" title="webview中使用post加载"></a>webview中使用post加载</h3><p>在项目中遇到一个需求，需要在android的webview中对特定请求（其实就是第一次打开webview的时候）进行可自定义header的post请求，而原生webview提供的post API是这样的：</p>
+<pre><code>public void postUrl(String url, byte[] postData);
+</code></pre><p>不可以自定义header，反观get API可以自定义header，真让人头大。</p>
+<pre><code>void loadUrl (String url, 
+            Map&lt;String, String&gt; additionalHttpHeaders)
+</code></pre>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/27/HttpURLConnection-and-webview/#more">More...</a>
+          </p>
+        
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+  
     <article id="post-lazy-evalutaion-in-scala" class="article article-type-post" itemscope itemprop="blogPost">
   
   <div class="article-inner">

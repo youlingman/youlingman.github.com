@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>闭包与协程 | cyl&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最近学习SICP Python（感谢译者大大），看到第五章序列和协程部分，发现和之前写的scala stream和无穷序列的学习记录基本一致，当时立了个flag说后续学习下协程，这里尝试补一下坑。">
+<meta name="keywords" content="functional">
+<meta property="og:type" content="article">
+<meta property="og:title" content="闭包与协程">
+<meta property="og:url" content="http://icyl.rocks/2020/05/17/closure-and-coroutines/index.html">
+<meta property="og:site_name" content="cyl&#39;s blog">
+<meta property="og:description" content="最近学习SICP Python（感谢译者大大），看到第五章序列和协程部分，发现和之前写的scala stream和无穷序列的学习记录基本一致，当时立了个flag说后续学习下协程，这里尝试补一下坑。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-05-17T11:55:04.054Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="闭包与协程">
+<meta name="twitter:description" content="最近学习SICP Python（感谢译者大大），看到第五章序列和协程部分，发现和之前写的scala stream和无穷序列的学习记录基本一致，当时立了个flag说后续学习下协程，这里尝试补一下坑。">
+  
+    <link rel="alternative" href="/atom.xml" title="cyl&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script> 
+</head></html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <section id="main"><article id="post-closure-and-coroutines" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      闭包与协程
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2020/05/17/closure-and-coroutines/" class="article-date">
+  <time datetime="2020-05-17T11:48:14.000Z" itemprop="datePublished">2020-05-17</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近学习<a href="https://wizardforcel.gitbooks.io/sicp-py/content/" target="_blank" rel="noopener">SICP Python</a>（感谢译者大大），看到第五章序列和协程部分，发现和之前写的<a href="http://icyl.rocks/2017/07/01/stream-in-scala/">scala stream</a>和<a href="http://icyl.rocks/2017/08/01/handle-infinity/">无穷序列</a>的学习记录基本一致，当时立了个flag说后续学习下协程，这里尝试补一下坑。<br><a id="more"></a></p>
+<h1 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h1><p>首先从函数说起，纯函数本身是无状态的，其接收输入，完成其中的逻辑处理，最后返回输出。对于相同的输入，同一个函数总是返回相同的输出（这里暂时不考虑side effect）。</p>
+<p>对于支持函数式的编程语言，即函数是“first class一等公民”，函数本身可以作为函数的返回，基于函数的封装和传递，可以完成对程序控制流的函数式抽象，当然无状态的函数表现能力比较弱，需要依赖输入作为状态信息，就是说调用函数方仍然需要维护相关上下文状态信息，是否可以直接在函数上绑定状态信息呢？</p>
+<p>闭包的作用就是为无状态的函数绑定额外状态信息。基于函数的词法作用域，函数被传递出去后仍然可以保持对定义时变量的访问能力，这就可以实现在函数上增加额外上下文状态信息。这个用法在JavaScript中十分常见，通过在函数内（outter）定义函数（inner）并返回，后续inner函数可以保持对outter函数作用域内对应变量的访问能力，下面用scala作为示例，实现在传递出去的inner函数上绑定变量a。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">scala&gt; <span class="function"><span class="keyword">def</span> <span class="title">outter</span></span>():() =&gt; <span class="type">Unit</span> = &#123; <span class="keyword">var</span> a = <span class="number">10</span>;  <span class="function"><span class="keyword">def</span> <span class="title">inner</span></span>():<span class="type">Unit</span> = &#123; a = a + <span class="number">1</span>; println(a); &#125;; <span class="keyword">return</span> inner; &#125;</span><br><span class="line">outter: ()() =&gt; <span class="type">Unit</span></span><br><span class="line"></span><br><span class="line">scala&gt; <span class="keyword">var</span> innerF = outter()</span><br><span class="line">innerF: () =&gt; <span class="type">Unit</span> = $$<span class="type">Lambda</span>$<span class="number">1079</span>/<span class="number">2053491093</span>@<span class="number">6806468</span>e</span><br><span class="line"></span><br><span class="line">scala&gt; innerF()</span><br><span class="line"><span class="number">11</span></span><br><span class="line"></span><br><span class="line">scala&gt; innerF()</span><br><span class="line"><span class="number">12</span></span><br></pre></td></tr></table></figure>
+<p>注意Python对闭包和匿名函数的支持是不完备的，同样的闭包实现在Python中直接报错。用对函数支持不完备的Python来讲SICP也是挺魔幻的……</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">outter</span><span class="params">()</span>:</span></span><br><span class="line"><span class="meta">... </span>   a = <span class="number">10</span></span><br><span class="line"><span class="meta">... </span>   <span class="function"><span class="keyword">def</span> <span class="title">inner</span><span class="params">()</span>:</span></span><br><span class="line"><span class="meta">... </span>     a = a + <span class="number">1</span></span><br><span class="line"><span class="meta">... </span>     println(a)</span><br><span class="line"><span class="meta">... </span>   <span class="keyword">return</span> inner</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>innerF = outter()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>innerF()</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">4</span>, <span class="keyword">in</span> inner</span><br><span class="line">UnboundLocalError: local variable <span class="string">'a'</span> referenced before assignment</span><br></pre></td></tr></table></figure>
+<p>虽然Python的函数不支持闭包，但是可以利用Python特有的生成器函数来实现类似的功能，生成器函数可以保存函数执行的当前上下文，实现可重入函数的效果，生成器的yield和next/send对应普通函数的返回和调用，差别在于普通函数的调用中断点和重入点在函数的return语句和函数的起始句，而生成器函数的中断点和重入点都在函数的yield语句处。</p>
+<h1 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h1><p>按照SICP Python的说法，协程是一种任务处理方式，其将任务分解成独立的函数步骤，然后不依赖于额外的协调组件，协程可以自发链接到一起来组成流水线，完成输入、执行和输出流程。</p>
+<p>按课程中介绍的协程 in Python way，利用生成器函数作为执行子任务的协程，通过yield/send完成子任务之间的同步，最后实现任务流的串联执行。</p>
+<p>每个协程可能是如下三个角色：</p>
+<ul>
+<li>生产者创建序列中的物品，并使用send()，而不是(yield)。</li>
+<li>过滤器使用(yield)来消耗物品并将结果使用send()发送给下一个步骤（传入的下一个协程/生成器）。</li>
+<li>消费者使用(yield)来消耗物品，但是从不发送。</li>
+</ul>
+<p>考虑到生成器这个东西是Python自己的专有概念，如果把这套协程机制按functional way的角度来看，本质上可以理解为是基于闭包传递的continuation-passing style模式，解决的问题是对任务的子任务/函数划分和任务拓扑流的执行。</p>
+<ol>
+<li>首先，将复杂任务解构划分为一个个独立的子任务/函数，利用闭包的方式绑定相关上下文状态到函数上，以支持带状态的可重入调用；</li>
+<li>按照任务执行流程，对每个子任务确定其后续执行的子任务，下一步执行的实际函数（们）可以通过定义当前子任务函数时确认，也可以在实际执行时通过上一步子任务传入；</li>
+<li>当每个子任务的后续操作都确定之后，整体的任务拓扑流程图也随之完整，这时从拓扑图的起始节点开始执行就可以驱动整体任务的执行。</li>
+</ol>
+<p>所以，协程其实是任务执行场景的一种工具/编程模式，其抽象层面相对于进程/线程要更高。从工具来说，可重入的子例程都可以称为协程，因此闭包函数也可以作为协程。从任务执行模式来说，协程可以实现复杂任务的划分和执行，而这套机制和continuation-passing style模式似乎是一致的。</p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/05/05/skiplist/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">skiplist</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+<section id="comments">
+    <div id="gitalk-container"></div>
+    <script type="text/javascript">
+        var gitalk = new Gitalk({
+              clientID: '4178d7f0ed6bb025e545',
+              clientSecret: 'dbb0e0a9532453611c0fa1e8f0942059c6478b67',
+              repo: 'youlingman.github.com',
+              owner: 'youlingman',
+              admin: 'youlingman',
+              id: location.pathname,      // Ensure uniqueness and length less than 50{{ page.title }}
+              distractionFreeMode: 'true'  // Facebook-like distraction free mode
+        })
+
+        gitalk.render('gitalk-container')
+    </script>
+</section>
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/youlingman" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2020 youlingman 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/Alex-fun/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a href="https://github.com/youlingman" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

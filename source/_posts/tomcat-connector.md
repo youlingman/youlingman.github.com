@@ -54,13 +54,13 @@ APR模式和NIO模式类似，也是acceptor+poller+worker的请求处理模式�
 
 当Endpoint完成底层网络处理后，连接的socket就由独立worker线程交到Processor进行下一步处理。在Processor处理之前，ConnectionHandler会根据连接状态维护当前连接集，每条连接对应一个socket-processor对。
 
-Processor完成的工作是通过socket输入流读取解析HTTP协议和请求头，初始化request和response，然后将request和response传递给adapter进行后续操作。
+Processor完成的工作是通过socket输入流读取解析HTTP请求行和其它头信息，初始化request和response，然后将request和response传递给adapter进行后续操作。经过Processor处理后，请求的URI、query、headers会被解析到request内。
 
 注意Processor初始化的request和response是tomcat自己定义的coyote包下的类，而不是servlet接口中的ServletRequest和ServletResponse。通过Endpoint和Processor合作，完成了将底层网络连接socket封装成coyote request/response的工作，这对组合被称为tomcat的连接器组件coyote。
 
 ## Adaptor
 
-Adapter负责连接Connector和Container，其接收Processor传过来的coyote request/response，解析封装后得到ServletRequest/ServletResponse，根据请求URI匹配得到对应容器，然后将ServletRequest/ServletResponse传入关联容器的Pipeline启动第一个Valve，驱动对应servlet容器处理请求流程。
+Adapter负责连接Connector和Container，其接收Processor传过来的coyote request/response，解析封装后得到ServletRequest/ServletResponse，根据请求URI匹配得到对应容器，然后将ServletRequest/ServletResponse传入关联容器的Pipeline启动第一个Valve，驱动对应servlet容器处理请求流程。这里匹配对应container前，需要先尝试从[path parameter](https://doriantaylor.com/policy/http-url-path-parameter-syntax)和cookie解析得到sessionid，如果请求带有sessionid，则要优先匹配包含该sessionid的context容器。
 
 # 小结
 

@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-- "7"
+- "8"
 
 branches:
   only:
@@ -32,7 +32,7 @@ script:
 
 after_success:
 - git clone --depth=50 --branch=master https://github.com/youlingman/youlingman.github.com.git .deploy_git
-- sed -i'' "s~git@github.com:youlingman/youlingman.github.com.git~https://${GITHUB_API_KEY}:x-oauth-basic@github.com/youlingman/youlingman.github.com.git~" _config.yml
+#- sed -i'' "s~git@github.com:youlingman/youlingman.github.com.git~https://${GITHUB_API_KEY}:x-oauth-basic@github.com/youlingman/youlingman.github.com.git~" _config.yml
 - sed -i'' "s~git@gitee.com:youlingman/hexo.git~https://${GITEE_TOKEN}:x-oauth-basic@gitee.com/youlingman/hexo.git~" _config.yml
-- hexo deploy --silent
-#- hexo deploy
+#- hexo deploy --silent
+- hexo deploy

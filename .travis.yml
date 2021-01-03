@@ -33,6 +33,7 @@ script:
 after_success:
 - git clone --depth=50 --branch=master https://github.com/youlingman/youlingman.github.com.git .deploy_git
 - sed -i'' "s~git@github.com:youlingman/youlingman.github.com.git~https://${GITHUB_API_KEY}:x-oauth-basic@github.com/youlingman/youlingman.github.com.git~" _config.yml
-- sed -i'' "s~git@gitee.com:youlingman/hexo.git~https://youlingman:${GITEE_TOKEN}@gitee.com/youlingman/hexo.git~" _config.yml
+- sed -i'' "s~git@gitee.com:youlingman/youlingman.git~https://youlingman:${GITEE_TOKEN}@gitee.com/youlingman/youlingman.git~" _config.yml
+- sed -i'' "s~git@coding.net:youlingman/hexo.git~https://${CODING_TOKEN}@e.coding.net/youlingman/hexo.git~" _config.yml
 - hexo deploy --silent
 #- hexo deploy

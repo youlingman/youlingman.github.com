@@ -102,3 +102,7 @@ deploy:
   repo: git@gitee.com:youlingman/youlingman.git
   branch: master
 
+- type: git
+  repo: git@coding.net:youlingman/hexo.git
+  branch: master
+

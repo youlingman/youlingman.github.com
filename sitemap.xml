@@ -4,98 +4,98 @@
   <url>
     <loc>http://icyl.rocks/2017/02/15/lazy-evalutaion-in-scala/</loc>
     
-    <lastmod>2021-01-01T08:57:09.608Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://icyl.rocks/2017/01/31/HelloCYL/</loc>
-    
-    <lastmod>2021-01-01T08:57:09.608Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://icyl.rocks/2017/03/27/HttpURLConnection-and-webview/</loc>
-    
-    <lastmod>2021-01-01T08:57:09.608Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://icyl.rocks/2017/11/08/Trampoline/</loc>
-    
-    <lastmod>2021-01-01T08:57:09.608Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://icyl.rocks/2018/03/26/android-handler/</loc>
-    
-    <lastmod>2021-01-01T08:57:09.608Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://icyl.rocks/2020/05/17/closure-and-coroutines/</loc>
-    
-    <lastmod>2021-01-01T08:57:09.608Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://icyl.rocks/2017/08/01/handle-infinity/</loc>
-    
-    <lastmod>2021-01-01T08:57:09.608Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://icyl.rocks/2020/01/01/HelloCYL-2019_2020/</loc>
-    
-    <lastmod>2021-01-01T08:57:09.608Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://icyl.rocks/2020/03/01/learn-some-container-docker/</loc>
-    
-    <lastmod>2021-01-01T08:57:09.608Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://icyl.rocks/2020/03/12/oauth-and-openid/</loc>
-    
-    <lastmod>2021-01-01T08:57:09.608Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://icyl.rocks/2020/05/05/skiplist/</loc>
-    
-    <lastmod>2021-01-01T08:57:09.608Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://icyl.rocks/2017/07/01/stream-in-scala/</loc>
-    
-    <lastmod>2021-01-01T08:57:09.608Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://icyl.rocks/2020/04/11/tomcat-connector/</loc>
-    
-    <lastmod>2021-01-01T08:57:09.608Z</lastmod>
+    <lastmod>2021-01-03T13:02:05.141Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://icyl.rocks/tags/index.html</loc>
     
-    <lastmod>2021-01-01T08:57:09.608Z</lastmod>
+    <lastmod>2021-01-03T13:02:05.141Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://icyl.rocks/2020/04/11/tomcat-connector/</loc>
+    
+    <lastmod>2021-01-03T13:02:05.141Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://icyl.rocks/2017/11/08/Trampoline/</loc>
+    
+    <lastmod>2021-01-03T13:02:05.141Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://icyl.rocks/2018/03/26/android-handler/</loc>
+    
+    <lastmod>2021-01-03T13:02:05.141Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://icyl.rocks/2020/05/17/closure-and-coroutines/</loc>
+    
+    <lastmod>2021-01-03T13:02:05.141Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://icyl.rocks/2017/08/01/handle-infinity/</loc>
+    
+    <lastmod>2021-01-03T13:02:05.141Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://icyl.rocks/2017/07/01/stream-in-scala/</loc>
+    
+    <lastmod>2021-01-03T13:02:05.141Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://icyl.rocks/2020/03/01/learn-some-container-docker/</loc>
+    
+    <lastmod>2021-01-03T13:02:05.141Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://icyl.rocks/2020/03/12/oauth-and-openid/</loc>
+    
+    <lastmod>2021-01-03T13:02:05.141Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://icyl.rocks/2020/05/05/skiplist/</loc>
+    
+    <lastmod>2021-01-03T13:02:05.141Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://icyl.rocks/2017/01/31/HelloCYL/</loc>
+    
+    <lastmod>2021-01-03T13:02:05.137Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://icyl.rocks/2017/03/27/HttpURLConnection-and-webview/</loc>
+    
+    <lastmod>2021-01-03T13:02:05.137Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://icyl.rocks/2020/01/01/HelloCYL-2019_2020/</loc>
+    
+    <lastmod>2021-01-03T13:02:05.137Z</lastmod>
     
   </url>
   

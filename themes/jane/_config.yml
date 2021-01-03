@@ -6,6 +6,9 @@ menu:
   Github: https://github.com/youlingman
 rss: /atom.xml
 
+#theme
+theme: jane
+
 # Content
 excerpt_link: More...
 fancybox: true
